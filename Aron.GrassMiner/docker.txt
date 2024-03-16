@@ -1,0 +1,4 @@
+﻿1. 建置
+docker build -t grassminer -f Dockerfile .
+
+2. 執行

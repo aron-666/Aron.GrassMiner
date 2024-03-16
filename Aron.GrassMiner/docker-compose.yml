@@ -1,0 +1,12 @@
+version: '1'
+services:
+  grassminer:
+    image: grassminer
+    container_name: grassminer
+    environment:
+      - GRASS_USER=user
+      - GRASS_PASS=password
+      - ADMIN_USER=admin
+      - ADMIN_PASS=admin
+    ports:
+      - 5001:8080
