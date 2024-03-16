@@ -2,3 +2,13 @@
 docker build -t grassminer -f Dockerfile .
 
 2. 執行
+docker-compose up
+
+3. 關閉
+docker-compose down
+
+4. 匯出
+docker save grassminer > grassminer.tar
+
+5. 匯入
+docker load < grassminer.tar
