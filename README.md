@@ -16,6 +16,13 @@ Grass挖礦不吃硬體，吃少許流量(每秒10-30KB)，就可以進行挖礦
 
 別人的介紹: https://www.binance.com/zh-TC/feed/post/1783966376178
 
+## 執行畫面
+1. 登入
+![image](https://github.com/aron-666/Aron.GrassMiner/blob/master/%E6%88%AA%E5%9C%96/%E5%BE%8C%E8%87%BA%E7%99%BB%E5%85%A5%E7%95%AB%E9%9D%A2.png?raw=true)
+
+2. 挖礦資訊
+![image](https://github.com/aron-666/Aron.GrassMiner/blob/master/%E6%88%AA%E5%9C%96/%E6%8C%96%E7%A4%A6%E7%95%AB%E9%9D%A2.png?raw=true)
+
 ## 1. Docker 安裝
 1. 安裝 Docker
    - Windows: [Docker Desktop](https://www.docker.com/products/docker-desktop/)
