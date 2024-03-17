@@ -17,8 +17,8 @@
 
 3. 編輯 docker-compose.yml
    ```
-   GRASS_USER=你的 Garss 帳號
-   GRASS_PASS=你的 Garss 密碼
+   GRASS_USER=你的 Grass 帳號
+   GRASS_PASS=你的 Grass 密碼
    ADMIN_USER=後臺管理帳號(自訂義)
    ADMIN_PASS=後臺管理密碼(自訂義)
    ```
@@ -36,3 +36,7 @@
    - 其他設備: 先開 cmd 打 `ipconfig`/`ifconfig` 找到你的區網 IP [http://IP:5001](http://IP:5001)
      - 關掉網頁還會繼續執行
      - Windows 要開機自動執行要去Docker Desktop設定改
+
+## 2. 作為服務安裝
+1. Windows 即將更新
+2. Linux 即將更新
