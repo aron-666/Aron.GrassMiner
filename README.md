@@ -8,6 +8,7 @@
 ## 1. Docker 安裝
 1. 安裝 Docker
    - Windows: [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+   - Linux: 你都會用Linux了還要我教？
 
 2. 匯入 Docker 映像檔 
    ```
