@@ -2,10 +2,9 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    
+
 }
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <style>
     /* 定义不同状态下的背景颜色 */
     .status-connected {
@@ -36,34 +35,65 @@
     setInterval(function () {
         $(document).ready(function () {
             $.ajax({
-                url: 'Miner/GetMinerRecord', 
+                url: 'Miner/GetMinerRecord',
                 type: 'GET',
                 dataType: 'json',
                 xhrFields: {
-                    withCredentials: true 
+                    withCredentials: true
                 },
                 success: function (data) {
                     const statusDisplay = statusDisplayMap[data.Status] || data.Status;
-                    $('#loginUserName').text(data.LoginUserName);
-                    $('#status').text(statusDisplay);
-                    $('#isConnected').text(data.IsConnected);
-                    $('#reconnectSeconds').text(data.ReconnectSeconds);
-                    $('#reconnectCounts').text(data.ReconnectCounts);
-                    $('#exception').text(data.Exception);
-                    $('#exceptionTime').text(data.ExceptionTime);
 
-                    $('#card').removeClass().addClass('card');
+                    if ($('#loginUserName').text() != data.LoginUserName)
+                        $('#loginUserName').text(data.LoginUserName);
+
+                    if ($('#status').text() != statusDisplay)
+                        $('#status').text(statusDisplay);
+
+                    if ($('#isConnected').text() != (data.IsConnected ? 'true' : 'false'))
+                        $('#isConnected').text(data.IsConnected);
+
+                    if ($('#reconnectSeconds').text() != data.ReconnectSeconds)
+                        $('#reconnectSeconds').text(data.ReconnectSeconds);
+
+                    if ($('#reconnectCounts').text() != data.ReconnectCounts)
+                        $('#reconnectCounts').text(data.ReconnectCounts);
+
+                    if ($('#exception').text() != data.Exception)
+                        $('#exception').text(data.Exception);
+
+                    if ($('#exceptionTime').text() != data.ExceptionTime)
+                        $('#exceptionTime').text(data.ExceptionTime);
+
+                    if ($('#publicIp').text() != data.PublicIp)
+                        $('#publicIp').text(data.PublicIp);
+
+                    if ($('#points').text() != data.Points)
+                        $('#points').text(data.Points);
+
+
                     switch (data.Status) {
                         case 'Connected':
-                            $('#card').addClass('status-connected');
+                            if (!$('#card').hasClass('status-connected')) {
+                                $('#card').removeClass().addClass('card');
+                                $('#card').addClass('status-connected');
+                            }
                             break;
                         case 'Disconnected':
                         case 'Error':
                         case 'Stop':
-                            $('#card').addClass('status-disconnected');
+                            if (!$('#card').hasClass('status-disconnected')) {
+                                $('#card').removeClass().addClass('card');
+                                $('#card').addClass('status-disconnected');
+                            }
                             break;
                         default:
-                            $('#card').addClass('status-appstart');
+                            if (!$('#card').hasClass('status-appstart')) {
+                                $('#card').removeClass().addClass('card');
+                                $('#card').addClass('status-appstart');
+
+                            }
+
                             break;
                     }
 
@@ -82,21 +112,13 @@
                         $('#recSec').hide();
                         $('#recCount').hide();
                     }
-                    if (data.Status == "Stop") {
-                           $('#binStart').show();
-                           $('#bthStop').hide();
-                    }
-                    else {
-                        $('#binStart').hide();
-                        $('#bthStop').show();
-                    }
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);
                 }
             });
         });
-    }, 500);
+    }, 1000);
 </script>
 
 <div class="text-center">
@@ -104,10 +126,14 @@
         <div class="col-md-4 mb-4">
             <div class="card" id="card">
                 <div class="card-body">
-                    <h5 class="card-title" style="color:blue;" id="使用者名稱"></h5>
                     <p class="card-text">
+                        <strong style="color:blue;">礦老闆: </strong> <span id="loginUserName"></span><br /><br />
                         <strong style="color:blue;">狀態: </strong> <span id="status"></span><br /><br />
                         <strong style="color:blue;">是否連線: </strong> <span id="isConnected"></span><br /><br />
+                        <strong style="color:blue;">外網IP: </strong> <span id="publicIp"></span><br /><br />
+                        <strong style="color:blue;">總工資: </strong> <span id="points"></span><br /><br />
+
+
                         <div id="recSec">
                             <strong style="color:blue;">重連秒數: </strong> <span id="reconnectSeconds"></span><br /><br />
                         </div>
@@ -115,18 +141,9 @@
                         <div id="recCount">
                             <strong style="color:blue;">重連次數: </strong> <span id="reconnectCounts"></span><br /><br />
                         </div>
-                        <div id="exMsg"><strong style="color:blue;">錯誤訊息: </strong> <span id="exception"></span><br /><br /></div>
-                        <div id="exTime"><strong style="color:blue;">錯誤時間: </strong> <span id="exceptionTime"></span><br /><br /></div>
 
-                        <div id="binStart">
-                            @Html.ActionLink("開始", "Start")
-                        </div>
-
-                        <div id="bthStop">
-                            @Html.ActionLink("停止", "Stop")
-
-                        </div>
-
+                        <p id="exMsg"><strong style="color:blue;">錯誤訊息: </strong> <span id="exception"></span><br /><br /></p>
+                        <p id="exTime"><strong style="color:blue;">錯誤時間: </strong> <span id="exceptionTime"></span><br /><br /></p>
 
                     </p>
                 </div>

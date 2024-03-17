@@ -4,6 +4,7 @@ using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
 using SeleniumExtras.WaitHelpers;
 using GrassMiner.Models;
+using System.Net;
 
 namespace GrassMiner.Services
 {
@@ -15,10 +16,14 @@ namespace GrassMiner.Services
         private bool Enabled { get; set; } = true;
 
         private Thread? thread;
+
+        private DateTime BeforeRefresh = DateTime.MinValue;
         public MinerService(AppConfig appConfig, MinerRecord minerRecord)
         {
             _appConfig = appConfig;
             this._minerRecord = minerRecord;
+            // call https://ifconfig.me to get the public IP address
+            _minerRecord.PublicIp = new WebClient().DownloadString("https://ifconfig.me");
 
             this.thread = new Thread(() =>
             {
@@ -26,7 +31,7 @@ namespace GrassMiner.Services
                 {
                     try
                     {
-                        if(Enabled)
+                        if (Enabled)
                         {
                             Run();
                         }
@@ -46,13 +51,13 @@ namespace GrassMiner.Services
                         Thread.Sleep(30000);
                     }
                 }
-                
+
             })
             { IsBackground = true };
 
             this.thread.Start();
         }
-        
+
         public void Stop()
         {
             Enabled = false;
@@ -62,7 +67,7 @@ namespace GrassMiner.Services
         {
 
             Enabled = true;
-            
+
         }
 
         private void Run()
@@ -79,6 +84,8 @@ namespace GrassMiner.Services
                 _minerRecord.ReconnectCounts = 0;
                 _minerRecord.Exception = null;
                 _minerRecord.ExceptionTime = null;
+                _minerRecord.Points = "0";
+
                 string userName = _appConfig.UserName;
                 string password = _appConfig.Password;
 
@@ -108,7 +115,7 @@ namespace GrassMiner.Services
                     _minerRecord.Status = MinerStatus.LoginPage;
 
                     // 等待登录元素加载
-                    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
                     IWebElement usernameElement = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("input[placeholder='Username or Email']")));
                     usernameElement.SendKeys(userName);
 
@@ -152,6 +159,14 @@ namespace GrassMiner.Services
                         else
                         {
                             _minerRecord.Status = MinerStatus.Connected;
+                            //$('img[alt="token"]')
+
+                            IWebElement? imageElement = driver.FindElement(By.CssSelector("img[alt='token']"));
+
+                            IWebElement? nextSiblingElement = imageElement?.FindElement(By.XPath("following-sibling::*"));
+
+                            //$('img[alt="token"]')
+                            _minerRecord.Points = nextSiblingElement?.Text ?? "";
                             _minerRecord.IsConnected = true;
                         }
                     }
@@ -177,6 +192,14 @@ namespace GrassMiner.Services
                                 break;
                             }
                         }
+                        if (Enabled && BeforeRefresh.AddSeconds(60) <= DateTime.Now)
+                        {
+                            BeforeRefresh = DateTime.Now;
+                            //refresh
+                            driver.Navigate().GoToUrl("chrome-extension://ilehaonighjijnmpnagapkhpcdbhclfg/index.html");
+                            SpinWait.SpinUntil(() => !Enabled, 15000);
+                        }
+                        Thread.Sleep(1000);
                     }
                 }
                 _minerRecord.Status = MinerStatus.Stop;

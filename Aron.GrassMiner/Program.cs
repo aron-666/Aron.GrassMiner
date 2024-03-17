@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SW.NetCore2.Extensions;
 using System.Diagnostics;
+using Quartz;
+using Aron.GrassMiner.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.SetBasePath(Directory.GetCurrentDirectory());
@@ -40,30 +42,30 @@ builder.Services.AddControllersWithViews();
 builder.Services.SetDefaultJsonConvert();
 
 // copy db/TempGrass.db to db/Grass.db
-if(!Directory.Exists("db"))
+if (!Directory.Exists("db"))
 {
-       Directory.CreateDirectory("db");
+    Directory.CreateDirectory("db");
 }
 
-if(!File.Exists("db/Grass.db"))
+if (!File.Exists("db/Grass.db"))
 {
     File.Copy("Temp/TempGrass.db", "db/Grass.db");
 }
 AppConfig appConfig = new AppConfig();
 builder.Configuration.Bind("app", appConfig);
-if(Environment.GetEnvironmentVariables().Contains("GRASS_USER"))
+if (Environment.GetEnvironmentVariables().Contains("GRASS_USER"))
 {
     appConfig.UserName = Environment.GetEnvironmentVariable("GRASS_USER").ToString();
 }
-if(Environment.GetEnvironmentVariables().Contains("GRASS_PASS"))
+if (Environment.GetEnvironmentVariables().Contains("GRASS_PASS"))
 {
     appConfig.Password = Environment.GetEnvironmentVariable("GRASS_PASS").ToString();
 }
-if(Environment.GetEnvironmentVariables().Contains("ADMIN_USER"))
+if (Environment.GetEnvironmentVariables().Contains("ADMIN_USER"))
 {
     appConfig.AdminUserName = Environment.GetEnvironmentVariable("ADMIN_USER").ToString();
 }
-if(Environment.GetEnvironmentVariables().Contains("ADMIN_PASS"))
+if (Environment.GetEnvironmentVariables().Contains("ADMIN_PASS"))
 {
     appConfig.AdminPassword = Environment.GetEnvironmentVariable("ADMIN_PASS").ToString();
 }
@@ -71,6 +73,8 @@ builder.Services.AddSingleton(appConfig);
 
 DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 optionsBuilder.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+optionsBuilder.LogTo(s => Debug.WriteLine(s));
+optionsBuilder.EnableSensitiveDataLogging();
 ApplicationDbContext context = new ApplicationDbContext(optionsBuilder.Options);
 
 
@@ -85,7 +89,7 @@ try
         identityUser.EmailConfirmed = true;
         await userManager.CreateAsync(identityUser, appConfig.AdminPassword);
         context.SaveChanges();
-        
+
     }
     else
     {
@@ -110,6 +114,32 @@ builder.Services.AddSingleton(minerRecord);
 
 MinerService minerService = new MinerService(appConfig, minerRecord);
 builder.Services.AddSingleton(minerService);
+
+builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionJobFactory();
+
+
+
+    //建立 job
+    var jobKey = new JobKey("UpdateIpJob");
+    q.AddJob<UpdateIpJob>(jobKey);
+    //建立 trigger(規則) 來觸發 job
+    q.AddTrigger(t => t
+        .WithIdentity("UpdateIpJob")
+        .ForJob(jobKey)
+        .StartNow()
+        .WithSimpleSchedule(x => x
+            .WithIntervalInMinutes(1)
+            .RepeatForever())
+    );
+});
+
+builder.Services.AddQuartzHostedService(opt =>
+{
+    opt.WaitForJobsToComplete = true;
+});
+
 
 var app = builder.Build();
 
