@@ -165,7 +165,6 @@ namespace GrassMiner.Services
 
                             IWebElement? nextSiblingElement = imageElement?.FindElement(By.XPath("following-sibling::*"));
 
-                            //$('img[alt="token"]')
                             _minerRecord.Points = nextSiblingElement?.Text ?? "";
                             _minerRecord.IsConnected = true;
                         }
