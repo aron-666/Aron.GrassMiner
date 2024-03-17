@@ -1,5 +1,5 @@
 ﻿1. 建置
-docker build -t grassminer -f Dockerfile .
+docker build -t aron666/aron.grassminer -f Dockerfile .
 
 2. 執行
 docker-compose up
@@ -8,7 +8,11 @@ docker-compose up
 docker-compose down
 
 4. 匯出
-docker save grassminer > grassminer.tar
+docker save aron666/aron.grassminer > grassminer.tar
 
 5. 匯入
 docker load < grassminer.tar
+
+6. 上傳
+docker tag aron666/aron.grassminer aron666/aron.grassminer:latest
+docker push aron666/aron.grassminer:latest
