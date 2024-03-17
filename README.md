@@ -1,6 +1,7 @@
 ![Total Visitors](https://komarev.com/ghpvc/?username=aron-666miner&color=green)
 
-# Aron.GrassMiner
+# Aron.GrassMiner 
+使用.Net 8撰寫
 
 ## 好用請支持，使用我的推薦碼註冊: RI3NGc63lVmUQix
 [立即註冊 app.getgrass.io](https://app.getgrass.io/register/?referralCode=RI3NGc63lVmUQix)
