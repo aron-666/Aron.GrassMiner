@@ -6,6 +6,15 @@
 ## 好用請支持，使用我的推薦碼註冊: RI3NGc63lVmUQix
 [立即註冊 app.getgrass.io](https://app.getgrass.io/register/?referralCode=RI3NGc63lVmUQix)
 
+Grass 目前場外(未上市)價格來到 1:0.0036USDT
+
+掛滿一天可以挖1800顆 等於一天6.48USDT
+Grass挖礦不吃硬體，吃少許流量(每秒10-30KB)，就可以進行挖礦。
+
+將來上市交易所，積分可直接換成加密貨幣。
+
+別人的介紹: https://www.binance.com/zh-TC/feed/post/1783966376178
+
 ## 1. Docker 安裝
 1. 安裝 Docker
    - Windows: [Docker Desktop](https://www.docker.com/products/docker-desktop/)
