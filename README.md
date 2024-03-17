@@ -35,4 +35,4 @@
    - 本機: [http://localhost:5001](http://localhost:5001)
    - 其他設備: 先開 cmd 打 `ipconfig`/`ifconfig` 找到你的區網 IP [http://IP:5001](http://IP:5001)
      - 關掉網頁還會繼續執行
-     - Windows 要開機自動執行要去設定改
+     - Windows 要開機自動執行要去Docker Desktop設定改
