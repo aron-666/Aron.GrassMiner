@@ -6,7 +6,6 @@
 }
 
 <style>
-    /* 定义不同状态下的背景颜色 */
     .status-connected {
         background-color: rgba(140, 248, 66, 0.8); /* 绿色 */
     }
@@ -19,7 +18,21 @@
         background-color: yellow; /* 黄色 */
     }
 
-    /* 在这里添加更多状态的背景颜色定义 */
+    .card {
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: left;
+    }
+
+    .card-text {
+        font-size: 16px;
+        color: black;
+    }
+
+    .card-text strong {
+        color: blue;
+    }
 </style>
 <script>
     const statusDisplayMap = {
@@ -120,31 +133,28 @@
         });
     }, 1000);
 </script>
-
-<div class="text-center">
-    <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="card" id="card">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 mb-4">
+            <div class="card status-connected" id="card">
                 <div class="card-body">
                     <p class="card-text">
-                        <strong style="color:blue;">礦老闆: </strong> <span id="loginUserName"></span><br /><br />
-                        <strong style="color:blue;">狀態: </strong> <span id="status"></span><br /><br />
-                        <strong style="color:blue;">是否連線: </strong> <span id="isConnected"></span><br /><br />
-                        <strong style="color:blue;">外網IP: </strong> <span id="publicIp"></span><br /><br />
-                        <strong style="color:blue;">總工資: </strong> <span id="points"></span><br /><br />
-
+                        <strong>礦老闆: </strong> <span id="loginUserName"></span><br /><br />
+                        <strong>狀態: </strong> <span id="status"></span><br /><br />
+                        <strong>是否連線: </strong> <span id="isConnected"></span><br /><br />
+                        <strong>外網IP: </strong> <span id="publicIp"></span><br /><br />
+                        <strong>總工資: </strong> <span id="points"></span><br /><br />
 
                         <div id="recSec">
-                            <strong style="color:blue;">重連秒數: </strong> <span id="reconnectSeconds"></span><br /><br />
+                            <strong>重連秒數: </strong> <span id="reconnectSeconds"></span><br /><br />
                         </div>
 
                         <div id="recCount">
-                            <strong style="color:blue;">重連次數: </strong> <span id="reconnectCounts"></span><br /><br />
+                            <strong>重連次數: </strong> <span id="reconnectCounts"></span><br /><br />
                         </div>
 
-                        <p id="exMsg"><strong style="color:blue;">錯誤訊息: </strong> <span id="exception"></span><br /><br /></p>
-                        <p id="exTime"><strong style="color:blue;">錯誤時間: </strong> <span id="exceptionTime"></span><br /><br /></p>
-
+                    <p id="exMsg" style="display: none;"><strong>錯誤訊息: </strong> <span id="exception"></span><br /><br /></p>
+                    <p id="exTime" style="display: none;"><strong>錯誤時間: </strong> <span id="exceptionTime"></span><br /><br /></p>
                     </p>
                 </div>
             </div>
