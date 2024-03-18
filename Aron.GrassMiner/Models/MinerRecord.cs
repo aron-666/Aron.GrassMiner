@@ -6,6 +6,7 @@ namespace GrassMiner.Models
 {
     public class MinerRecord
     {
+        public string? AppVersion { get; set; } = null;
         /// <summary>
         /// 連線使用者名稱
         /// </summary>
