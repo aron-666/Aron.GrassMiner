@@ -131,14 +131,14 @@ builder.Services.AddQuartz(q =>
 
     //建立 job
     var jobKey = new JobKey("UpdateIpJob");
-    q.AddJob<UpdateIpJob>(jobKey);
+    q.AddJob<UpdateJob>(jobKey);
     //建立 trigger(規則) 來觸發 job
     q.AddTrigger(t => t
         .WithIdentity("UpdateIpJob")
         .ForJob(jobKey)
         .StartNow()
         .WithSimpleSchedule(x => x
-            .WithIntervalInMinutes(1)
+            .WithIntervalInMinutes(10)
             .RepeatForever())
     );
 });

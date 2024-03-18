@@ -126,6 +126,16 @@
                         $('#recSec').hide();
                         $('#recCount').hide();
                     }
+
+                    if (data.NeedUpdate) {
+                        $('#divUpdate').show();
+                    }
+                    else {
+                        $('#divUpdate').hide();
+                    }
+                    const updateMsg = `有更新! 當前版本: ${data.AppVersion}，最新版本: ${data.LastAppVersion} `
+                    if ($('#updateMsg').text() != updateMsg)
+                        $('#updateMsg').text(updateMsg);
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);
@@ -138,12 +148,25 @@
  
 
 
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6 mb-4">
             <div class="card status-connected" id="card">
+
                 <div class="card-body">
+
+                    <div id="divUpdate">
+                        <span id="updateMsg"></span>
+                        <br />
+                        <a id="goToUpdate" href="https://github.com/aron-666/Aron.GrassMiner">
+                            前往更新
+                        </a>
+                        <br /><br />
+
+                    </div>
                     <p class="card-text">
+                        
                         <strong>礦老闆: </strong> <span id="loginUserName"></span><br /><br />
                         <strong>狀態: </strong> <span id="status"></span><br /><br />
                         <strong>是否連線: </strong> <span id="isConnected"></span><br /><br />
@@ -158,8 +181,8 @@
                             <strong>重連次數: </strong> <span id="reconnectCounts"></span><br /><br />
                         </div>
 
-                    <p id="exMsg" style="display: none;"><strong>錯誤訊息: </strong> <span id="exception"></span><br /><br /></p>
-                    <p id="exTime" style="display: none;"><strong>錯誤時間: </strong> <span id="exceptionTime"></span><br /><br /></p>
+                        <p id="exMsg" style="display: none;"><strong>錯誤訊息: </strong> <span id="exception"></span><br /><br /></p>
+                        <p id="exTime" style="display: none;"><strong>錯誤時間: </strong> <span id="exceptionTime"></span><br /><br /></p>
                     </p>
                 </div>
             </div>
