@@ -7,6 +7,36 @@ namespace GrassMiner.Models
     public class MinerRecord
     {
         public string? AppVersion { get; set; } = null;
+
+        public string? LastAppVersion { get; set; } = null;
+
+        public bool NeedUpdate {
+            get 
+            {
+                if (AppVersion == null || LastAppVersion == null)
+                {
+                    return true;
+                }
+                // 判斷 AppVersion 是否小於 LastAppVersion
+                string[] appVersion = AppVersion.Split('.');
+                string[] lastAppVersion = LastAppVersion.Split('.');
+
+                if (appVersion.Length != lastAppVersion.Length)
+                {
+                    return true;
+                }
+
+                for (int i = 0; i < appVersion.Length; i++)
+                {
+                    if (int.Parse(appVersion[i]) < int.Parse(lastAppVersion[i]))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+
+            } 
+        }
         /// <summary>
         /// 連線使用者名稱
         /// </summary>
