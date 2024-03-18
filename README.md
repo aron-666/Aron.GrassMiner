@@ -37,6 +37,8 @@ Grass挖礦不吃硬體，吃少許流量(每秒10-30KB)，就可以進行挖礦
    GRASS_PASS=你的 Grass 密碼
    ADMIN_USER=後臺管理帳號(自訂義)
    ADMIN_PASS=後臺管理密碼(自訂義)
+   PROXY_ENABLE=true / false
+   PROXY_HOST=http(s)://host:port
    ```
 
    - Port 5001 會在你電腦上開一個 Port，要讓區網連請開防火牆 Port 5001
