@@ -10,5 +10,9 @@
         public string? AdminPassword { get; set; }
 
         public bool ShowChrome { get; set; }
+
+        public string? ProxyEnable { get; set; } = "false";
+
+        public string? ProxyHost { get; set; }
     }
 }
