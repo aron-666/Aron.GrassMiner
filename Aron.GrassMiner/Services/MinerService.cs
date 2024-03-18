@@ -85,6 +85,7 @@ namespace GrassMiner.Services
                 _minerRecord.Exception = null;
                 _minerRecord.ExceptionTime = null;
                 _minerRecord.Points = "0";
+                _minerRecord.AppVersion = "";
 
                 string userName = _appConfig.UserName;
                 string password = _appConfig.Password;
@@ -102,6 +103,11 @@ namespace GrassMiner.Services
                 options.AddArgument("--enable-javascript");
                 options.AddArgument("--auto-close-quit-quit");
                 options.AddArgument("disable-infobars");
+                if((_appConfig.ProxyEnable ?? "").ToLower() == "true" 
+                    && !string.IsNullOrEmpty(_appConfig.ProxyHost))
+                {
+                    options.AddArgument("--proxy-server=" + _appConfig.ProxyHost);
+                }
                 options.AddExcludedArgument("enable-automation");
                 options.AddUserProfilePreference("credentials_enable_service", false);
                 options.AddUserProfilePreference("profile.password_manager_enabled", false);
