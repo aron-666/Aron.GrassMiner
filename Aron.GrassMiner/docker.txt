@@ -2,10 +2,10 @@
 docker build -t aron666/aron.grassminer -f Dockerfile .
 
 2. 執行
-docker-compose up
+docker compose up
 
 3. 關閉
-docker-compose down
+docker compose down
 
 4. 匯出
 docker save aron666/aron.grassminer > grassminer.tar

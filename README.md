@@ -30,13 +30,8 @@ Grass挖礦不吃硬體，吃少許流量(每秒10-30KB)，就可以進行挖礦
    - Windows: [Docker Desktop](https://www.docker.com/products/docker-desktop/)
    - Linux: 你都會用Linux了還要我教？
 
-2. 匯入 Docker 映像檔 
-   ```
-   docker pull aron666/aron.grassminer
-   //這裡上docker hub了，不用下載tar
-   ```
 
-3. 編輯 docker-compose.yml
+2. 編輯 docker-compose.yml
    ```
    GRASS_USER=你的 Grass 帳號
    GRASS_PASS=你的 Grass 密碼
@@ -46,10 +41,10 @@ Grass挖礦不吃硬體，吃少許流量(每秒10-30KB)，就可以進行挖礦
 
    - Port 5001 會在你電腦上開一個 Port，要讓區網連請開防火牆 Port 5001
 
-4. 執行
+3. 執行
    ```
    //cmd請先 cd 到資料夾目錄
-   docker-compose up
+   docker compose up
    ```
    再來就可以用網址看後臺狀態了
 
@@ -64,3 +59,4 @@ Grass挖礦不吃硬體，吃少許流量(每秒10-30KB)，就可以進行挖礦
 
 ## 更新日誌
 2024-03-18: 增加UI資訊/修復登入功能/美化UI(我前端就爛)
+2024-03-18: 加入版本更新提醒/Proxy設定

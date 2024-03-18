@@ -6,7 +6,23 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-GrassMiner-446b1b79-4315-4798-b0bb-56888db86536</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <PublishTrimmed>True</PublishTrimmed>
+    <PublishAot>False</PublishAot>
+    <SignAssembly>False</SignAssembly>
+    <NeutralLanguage>zh-TW</NeutralLanguage>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/aron-666/Aron.GrassMiner</RepositoryUrl>
+    <FileVersion>1.0.0.1</FileVersion>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <Version>$(AssemblyVersion)</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
