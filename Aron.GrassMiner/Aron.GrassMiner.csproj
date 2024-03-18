@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-GrassMiner-446b1b79-4315-4798-b0bb-56888db86536</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <PublishTrimmed>True</PublishTrimmed>
+    <PublishTrimmed>False</PublishTrimmed>
     <PublishAot>False</PublishAot>
     <SignAssembly>False</SignAssembly>
     <NeutralLanguage>zh-TW</NeutralLanguage>
