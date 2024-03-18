@@ -85,7 +85,8 @@ namespace GrassMiner.Services
                 _minerRecord.Exception = null;
                 _minerRecord.ExceptionTime = null;
                 _minerRecord.Points = "0";
-                _minerRecord.AppVersion = "";
+                // get assembly version
+                _minerRecord.AppVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
                 string userName = _appConfig.UserName;
                 string password = _appConfig.Password;
