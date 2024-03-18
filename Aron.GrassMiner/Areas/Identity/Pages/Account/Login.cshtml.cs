@@ -116,10 +116,16 @@ namespace GrassMiner.Areas.Identity.Pages.Account
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var user = _applicationDbContext.Users.FirstOrDefault(x => x.UserName == Input.UserName);
+                
+                if(user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid Username or password");
+                    return Page();
+                }
                 string hashedPassword = new PasswordHasher<AppUser>().HashPassword(user, Input.Password);
 
                 PasswordHasher<AppUser> passwordHasher = new PasswordHasher<AppUser>();
-                var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, Input.Password);
+                var result = passwordHasher.VerifyHashedPassword(user, user?.PasswordHash, Input.Password);
                 if (result == PasswordVerificationResult.Success)
                 {
                     await _signInManager.SignInAsync(user, Input.RememberMe);
@@ -130,7 +136,7 @@ namespace GrassMiner.Areas.Identity.Pages.Account
                 else
                 {
 
-                    ModelState.AddModelError(string.Empty, $"Invalid login attempt. {hashedPassword} {user.PasswordHash}" );
+                    ModelState.AddModelError(string.Empty, $"Invalid login attempt." );
                     return Page();
                 }
             }
