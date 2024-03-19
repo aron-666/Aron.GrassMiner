@@ -1,6 +1,5 @@
 ![Total Visitors](https://komarev.com/ghpvc/?username=aron-666miner&color=green)
 
-# Multilanguage README Pattern
 [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/aron-666/Aron.GrassMiner/Readme.en.md)
 [![中文](https://img.shields.io/badge/lang-中文-blue.svg)](https://github.com/aron-666/Aron.GrassMiner)
 
