@@ -85,6 +85,9 @@
                     if ($('#points').text() != data.Points)
                         $('#points').text(data.Points);
 
+                    if ($('#networkQuality').text() != data.NetworkQuality)
+                        $('#networkQuality').text(data.NetworkQuality);
+
 
                     switch (data.Status) {
                         case 'Connected':
@@ -171,6 +174,7 @@
                         <strong>狀態: </strong> <span id="status"></span><br /><br />
                         <strong>是否連線: </strong> <span id="isConnected"></span><br /><br />
                         <strong>外網IP: </strong> <span id="publicIp"></span><br /><br />
+                        <strong>網路品質: </strong> <span id="networkQuality"></span><br /><br />
                         <strong>總工資: </strong> <span id="points"></span><br /><br />
 
                         <div id="recSec">

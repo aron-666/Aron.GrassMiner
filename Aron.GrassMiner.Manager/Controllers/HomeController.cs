@@ -1,30 +1,22 @@
-﻿using GrassMiner.Models;
+using Aron.GrassMiner.Manager.Models;
 using Microsoft.AspNetCore.Mvc;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
-using SeleniumExtras.WaitHelpers;
 using System.Diagnostics;
 
-namespace GrassMiner.Controllers
+namespace Aron.GrassMiner.Manager.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly AppConfig _appConfig;
 
-        public HomeController(ILogger<HomeController> logger, AppConfig appConfig)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            this._appConfig = appConfig;
         }
 
         public IActionResult Index()
         {
-            return Redirect("~/Miner");
+            return View();
         }
-
-        
 
         public IActionResult Privacy()
         {
