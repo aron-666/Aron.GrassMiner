@@ -12,7 +12,14 @@ namespace Aron.GrassMiner.Jobs
             try
             {
                 // call https://ifconfig.me to get the public IP address
-                _minerRecord.PublicIp = new WebClient().DownloadString("https://ifconfig.me");
+                try
+                {
+                    _minerRecord.PublicIp = new WebClient().DownloadString("https://ifconfig.me");
+                }
+                catch (Exception ex)
+                {
+                    _minerRecord.PublicIp = "Error to get your public ip.";
+                }
 
                 // call https://raw.githubusercontent.com/aron-666/Aron.GrassMiner/master/Aron.GrassMiner/Aron.GrassMiner.csproj to get the latest version
                 var latestVersion = new WebClient().DownloadString("https://raw.githubusercontent.com/aron-666/Aron.GrassMiner/master/Aron.GrassMiner/Aron.GrassMiner.csproj");

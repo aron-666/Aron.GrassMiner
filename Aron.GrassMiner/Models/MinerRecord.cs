@@ -93,5 +93,11 @@ namespace GrassMiner.Models
         [Display(Name = "點數")]
         public string Points { get; set; }
 
+        /// <summary>
+        /// 網路品質
+        /// </summary>
+        [Display(Name = "網路品質")]
+        public string? NetworkQuality { get; set; }
+
     }
 }

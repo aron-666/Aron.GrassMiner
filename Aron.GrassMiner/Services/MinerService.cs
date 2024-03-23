@@ -23,7 +23,14 @@ namespace GrassMiner.Services
             _appConfig = appConfig;
             this._minerRecord = minerRecord;
             // call https://ifconfig.me to get the public IP address
-            _minerRecord.PublicIp = new WebClient().DownloadString("https://ifconfig.me");
+            try
+            {
+                _minerRecord.PublicIp = new WebClient().DownloadString("https://ifconfig.me");
+            }
+            catch (Exception ex)
+            {
+                _minerRecord.PublicIp = "Error to get your public ip.";
+            }
 
             this.thread = new Thread(() =>
             {
@@ -173,6 +180,9 @@ namespace GrassMiner.Services
                             IWebElement? nextSiblingElement = imageElement?.FindElement(By.XPath("following-sibling::*"));
 
                             _minerRecord.Points = nextSiblingElement?.Text ?? "";
+                            IWebElement element = driver.FindElement(By.XPath("//p[starts-with(., 'Network quality:')]"));
+                            _minerRecord.NetworkQuality = element.Text.Replace("Network quality:", "");
+                            IWebElement? userNameElement = driver.FindElement(By.CssSelector("span[title='Username']"));
                             _minerRecord.IsConnected = true;
                         }
                     }
