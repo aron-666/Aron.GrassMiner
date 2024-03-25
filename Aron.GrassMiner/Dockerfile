@@ -23,6 +23,18 @@ WORKDIR /app
 RUN apt update && apt-get install -y wget
 RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 RUN apt-get install -y ./google-chrome-stable_current_amd64.deb
+RUN mkdir /vpnclient
+RUN apt-get install -y unzip
 
 COPY --from=publish /app/publish .
+RUN unzip /app/vpnclient.zip -d /
+RUN rm /app/vpnclient.zip
+WORKDIR /vpnclient
+RUN apt-get update && apt-get install -y gcc make 
+RUN sh .install.sh
+RUN apt-get install -y isc-dhcp-client nano curl net-tools iputils-ping
+
+
+WORKDIR /app
+#CMD ./run.sh
 ENTRYPOINT ["dotnet", "Aron.GrassMiner.dll"]

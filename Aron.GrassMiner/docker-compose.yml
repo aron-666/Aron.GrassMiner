@@ -10,3 +10,11 @@ services:
       - ADMIN_PASS=admin
     ports:
       - 5001:8080
+    privileged: true
+    cap_add:
+      - ALL
+    volumes:
+      - /dev:/dev
+      - /lib/modules:/lib/modules
+    stdin_open: true
+    tty: true

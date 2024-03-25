@@ -10,6 +10,27 @@ using System.Diagnostics;
 using Quartz;
 using Aron.GrassMiner.Jobs;
 
+// start vpnclient
+try
+{
+    Process process = new Process()
+    {
+        StartInfo = new ProcessStartInfo
+        {
+            FileName = "/vpnclient/vpnclient",
+            Arguments = "start",
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        }
+    };
+    process.Start();
+}
+catch (Exception ex)
+{
+}
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.SetBasePath(Directory.GetCurrentDirectory());
 
@@ -141,12 +162,26 @@ builder.Services.AddQuartz(q =>
             .WithIntervalInMinutes(10)
             .RepeatForever())
     );
+
+    //建立 job
+    var jobKey2 = new JobKey("VPNJob");
+    q.AddJob<VPNJob>(jobKey2);
+    //建立 trigger(規則) 來觸發 job
+    q.AddTrigger(t => t
+           .WithIdentity("VPNJob")
+           .ForJob(jobKey2)
+           .StartNow()
+           .WithSimpleSchedule(x => x
+           .WithIntervalInMinutes(60)
+                .RepeatForever())
+    );
 });
 
 builder.Services.AddQuartzHostedService(opt =>
 {
     opt.WaitForJobsToComplete = true;
 });
+builder.Services.AddMySwagger();
 
 
 var app = builder.Build();
@@ -161,6 +196,7 @@ else
     app.UseExceptionHandler("/Home/Error");
 }
 app.UseStaticFiles();
+app.UseMySwagger();
 
 app.UseRouting();
 

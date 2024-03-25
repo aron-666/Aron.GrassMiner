@@ -42,6 +42,15 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+    <PackageReference Include="NJsonSchema" Version="11.0.0" />
+    <PackageReference Include="NJsonSchema.NewtonsoftJson" Version="11.0.0" />
+    <PackageReference Include="NJsonSchema.Yaml" Version="11.0.0" />
+    <PackageReference Include="NSwag.Annotations" Version="14.0.4" />
+    <PackageReference Include="NSwag.AspNetCore" Version="14.0.4" />
+    <PackageReference Include="NSwag.Core" Version="14.0.4" />
+    <PackageReference Include="NSwag.Core.Yaml" Version="14.0.4" />
+    <PackageReference Include="NSwag.Generation" Version="14.0.4" />
+    <PackageReference Include="NSwag.Generation.AspNetCore" Version="14.0.4" />
     <PackageReference Include="Quartz" Version="3.8.1" />
     <PackageReference Include="Quartz.AspNetCore" Version="3.8.1" />
     <PackageReference Include="Selenium.Support" Version="4.18.1" />
@@ -51,6 +60,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="SoftEtherVPNCmdNETCore">
+      <HintPath>libs\SoftEtherVPNCmdNETCore.dll</HintPath>
+    </Reference>
     <Reference Include="SW.NetCore2">
       <HintPath>libs\SW.NetCore2.dll</HintPath>
     </Reference>
@@ -60,7 +72,13 @@
     <None Update="Grass-Extension.crx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="run.sh">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Temp\TempGrass.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="vpnclient.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
