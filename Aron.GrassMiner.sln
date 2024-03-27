@@ -5,7 +5,7 @@ VisualStudioVersion = 17.9.34526.213
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aron.GrassMiner", "Aron.GrassMiner\Aron.GrassMiner.csproj", "{7C0B8F8A-76CB-41B5-A07A-6ED1BDE642CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aron.GrassMiner.Manager", "Aron.GrassMiner.Manager\Aron.GrassMiner.Manager.csproj", "{1E4DE272-E003-4472-B85E-7B1BA8032AEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aron.GrassMiner.Manager", "Aron.GrassMiner.Manager\Aron.GrassMiner.Manager.csproj", "{1E4DE272-E003-4472-B85E-7B1BA8032AEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
