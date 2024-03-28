@@ -215,9 +215,9 @@ namespace SoftEtherVPNCmdNETCore.VPNClient
         /// </summary>
         /// <param name="path"></param>
         /// <exception cref="NotImplementedException"></exception>
-        public void AccountImport(string path)
+        public async Task AccountImport(string path)
         {
-            throw new NotImplementedException();
+            string output = await cmd.ExecuteCommand(host, "CLIENT", "AccountImport", path, password: password);
         }
 
         /// <summary>
@@ -429,9 +429,9 @@ namespace SoftEtherVPNCmdNETCore.VPNClient
         /// </summary>
         /// <param name="name"></param>
         /// <exception cref="NotImplementedException"></exception>
-        public void AccountStartupRemove(string name)
+        public async Task AccountStartupRemove(string name)
         {
-            throw new NotImplementedException();
+            string output = await cmd.ExecuteCommand(host, "CLIENT", "AccountStartupRemove", name, password: password);
         }
 
         /// <summary>
@@ -439,9 +439,10 @@ namespace SoftEtherVPNCmdNETCore.VPNClient
         /// </summary>
         /// <param name="name"></param>
         /// <exception cref="NotImplementedException"></exception>
-        public void AccountStartupSet(string name)
+        public async Task AccountStartupSet(string name)
         {
-            throw new NotImplementedException();
+            
+            string output = await cmd.ExecuteCommand(host, "CLIENT", "AccountStartupSet", name, password: password);
         }
 
         /// <summary>

@@ -9,6 +9,8 @@ using SW.NetCore2.Extensions;
 using System.Diagnostics;
 using Quartz;
 using Aron.GrassMiner.Jobs;
+using SoftEtherVPNCmdNETCore.VPNClient;
+using Aron.GrassMiner.Services;
 
 // start vpnclient
 try
@@ -141,8 +143,12 @@ context.Dispose();
 MinerRecord minerRecord = new MinerRecord();
 builder.Services.AddSingleton(minerRecord);
 
+MinerRecord minerRecord1 = new MinerRecord();
+
 MinerService minerService = new MinerService(appConfig, minerRecord);
 builder.Services.AddSingleton(minerService);
+
+MinerService minerService1 = new MinerService(appConfig, minerRecord1);
 
 builder.Services.AddQuartz(q =>
 {
@@ -164,17 +170,17 @@ builder.Services.AddQuartz(q =>
     );
 
     //建立 job
-    var jobKey2 = new JobKey("VPNJob");
-    q.AddJob<VPNJob>(jobKey2);
-    //建立 trigger(規則) 來觸發 job
-    q.AddTrigger(t => t
-           .WithIdentity("VPNJob")
-           .ForJob(jobKey2)
-           .StartNow()
-           .WithSimpleSchedule(x => x
-           .WithIntervalInMinutes(60)
-                .RepeatForever())
-    );
+    //var jobKey2 = new JobKey("VPNJob");
+    //q.AddJob<VPNJob>(jobKey2);
+    ////建立 trigger(規則) 來觸發 job
+    //q.AddTrigger(t => t
+    //       .WithIdentity("VPNJob")
+    //       .ForJob(jobKey2)
+    //       .StartNow()
+    //       .WithSimpleSchedule(x => x
+    //       .WithIntervalInMinutes(60)
+    //            .RepeatForever())
+    //);
 });
 
 builder.Services.AddQuartzHostedService(opt =>
@@ -183,6 +189,15 @@ builder.Services.AddQuartzHostedService(opt =>
 });
 builder.Services.AddMySwagger();
 
+//VpnClient vpnClient = new VpnClient("/vpnclient/vpncmd");
+//vpnClient.NicCreate("VPN100");
+//vpnClient.AccountImport("ncku.vpn");
+//vpnClient.AccountNicSet("ncku", "VPN100");
+//vpnClient.AccountStartupSet("ncku");
+//vpnClient.AccountConnect("ncku");
+VPNClientService vPNClientService = new VPNClientService();
+vPNClientService.Start().GetAwaiter().GetResult();
+builder.Services.AddSingleton(vPNClientService);
 
 var app = builder.Build();
 
