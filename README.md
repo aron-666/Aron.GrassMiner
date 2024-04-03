@@ -52,7 +52,9 @@ Grass挖礦不吃硬體，吃少許流量(每秒10-30KB)，就可以進行挖礦
 3. 執行
    ```
    //cmd請先 cd 到資料夾目錄
-   docker compose up
+   docker compose up -d
+   或
+   docker-compose up -d
    ```
    再來就可以用網址看後臺狀態了
 
