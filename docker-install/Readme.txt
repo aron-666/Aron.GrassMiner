@@ -17,7 +17,7 @@ Port 5001
 
 4. 執行
 //cmd請先 cd 到資料夾目錄
-docker-compose up
+docker compose up
 再來就可以用網址看後臺狀態了
 
 本機: http://localhost:5001
