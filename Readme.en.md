@@ -31,7 +31,7 @@ Others' Introduction: [Binance Article](https://www.binance.com/zh-TC/feed/post/
    - Windows: [Docker Desktop](https://www.docker.com/products/docker-desktop/)
    - Linux: If you're using Linux, you probably know how to do this already.
 
-2. Edit docker-compose.yml
+2. Edit docker-compose.yml (In the docker-install folder of the source code)
    ```
    GRASS_USER=Your Grass account
    GRASS_PASS=Your Grass password
