@@ -32,7 +32,7 @@ Grass挖礦不吃硬體，吃少許流量(每秒10-30KB)，就可以進行挖礦
    - Linux: 你都會用Linux了還要我教？
 
 
-2. 編輯 docker-compose.yml
+2. 編輯 docker-compose.yml (在程式碼的docker-install資料夾內)
    ```
    GRASS_USER=你的 Grass 帳號
    GRASS_PASS=你的 Grass 密碼
