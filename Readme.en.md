@@ -46,7 +46,9 @@ Others' Introduction: [Binance Article](https://www.binance.com/zh-TC/feed/post/
 3. Execute
    ```
    //cmd, navigate to the directory first
-   docker compose up
+   docker compose up -d
+   or
+   docker-compose up -d
    ```
    Then, you can check the backend status using the following URLs:
 
