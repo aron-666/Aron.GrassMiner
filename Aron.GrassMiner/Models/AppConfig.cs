@@ -14,5 +14,8 @@
         public string? ProxyEnable { get; set; } = "false";
 
         public string? ProxyHost { get; set; }
+
+        public string? ProxyUser { get; set; } 
+        public string? ProxyPass { get; set; }
     }
 }

@@ -77,6 +77,15 @@ if (Environment.GetEnvironmentVariables().Contains("PROXY_HOST"))
 {
     appConfig.ProxyHost = Environment.GetEnvironmentVariable("PROXY_HOST").ToString();
 }
+if (Environment.GetEnvironmentVariables().Contains("PROXY_USER"))
+{
+    appConfig.ProxyUser = Environment.GetEnvironmentVariable("PROXY_USER").ToString();
+}
+
+if (Environment.GetEnvironmentVariables().Contains("PROXY_PASS"))
+{
+    appConfig.ProxyUser = Environment.GetEnvironmentVariable("PROXY_PASS").ToString();
+}
 builder.Services.AddSingleton(appConfig);
 
 DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();

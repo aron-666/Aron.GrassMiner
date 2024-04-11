@@ -43,15 +43,17 @@ Grass挖礦不吃硬體，吃少許流量(每秒10-30KB)，就可以進行挖礦
    GRASS_PASS=你的 Grass 密碼
    ADMIN_USER=後臺管理帳號(自訂義)
    ADMIN_PASS=後臺管理密碼(自訂義)
-   PROXY_ENABLE=true / false
+   PROXY_ENABLE="true" / "false"
    PROXY_HOST=http(s)://host:port
+   PROXY_USER=user
+   PROXY_PASS=pass
    ```
 
    - Port 5001 會在你電腦上開一個 Port，要讓區網連請開防火牆 Port 5001
 
 3. 執行
    ```
-   //cmd請先 cd 到資料夾目錄
+   //cmd請先 cd 到資料夾目錄(docker-install)
    docker compose up -d
    或
    docker-compose up -d
