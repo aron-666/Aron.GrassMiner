@@ -82,7 +82,6 @@ namespace GrassMiner.Services
             try
             {
                 driver?.Quit();
-                driver?.Dispose();
                 driver = null;
                 _minerRecord.Status = MinerStatus.AppStart;
                 _minerRecord.IsConnected = false;
@@ -115,6 +114,10 @@ namespace GrassMiner.Services
                     && !string.IsNullOrEmpty(_appConfig.ProxyHost))
                 {
                     options.AddArgument("--proxy-server=" + _appConfig.ProxyHost);
+                    if(!string.IsNullOrEmpty(_appConfig.ProxyUser) && !string.IsNullOrEmpty(_appConfig.ProxyPass))
+                    {
+                        options.AddArgument($"--proxy-auth={_appConfig.ProxyUser}:{_appConfig.ProxyPass}");
+                    }
                 }
                 options.AddExcludedArgument("enable-automation");
                 options.AddUserProfilePreference("credentials_enable_service", false);
@@ -229,7 +232,7 @@ namespace GrassMiner.Services
             finally
             {
                 driver?.Quit();
-                driver?.Dispose();
+                driver = null;
             }
         }
 

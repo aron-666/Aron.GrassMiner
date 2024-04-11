@@ -11,6 +11,10 @@ GRASS_USER=你的Garss帳號
 GRASS_PASS=你的Garss密碼
 ADMIN_USER=後臺管理帳號(自訂義)
 ADMIN_PASS=後臺管理密碼(自訂義)
+PROXY_ENABLE="true" / "false"
+PROXY_HOST=http(s)://host:port
+PROXY_USER=user
+PROXY_PASS=pass
 
 Port 5001 
 會在你電腦上開一個Port，要讓區網連請開防火牆 Port 5001

@@ -37,15 +37,21 @@ Others' Introduction: [Binance Article](https://www.binance.com/zh-TC/feed/post/
    GRASS_PASS=Your Grass password
    ADMIN_USER=Backend management account (customizable)
    ADMIN_PASS=Backend management password (customizable)
-   PROXY_ENABLE=true / false
+   PROXY_ENABLE="true" / "false"
    PROXY_HOST=http(s)://host:port
+   PROXY_USER=user
+   PROXY_PASS=pass
    ```
 
    - Port 5001 will open a port on your computer. Open firewall port 5001 for LAN access.
 
 3. Execute
    ```
+<<<<<<< HEAD
    //cmd, navigate to the directory first
+=======
+   //cmd, navigate to the directory first (docker-install)
+>>>>>>> develop
    docker compose up -d
    or
    docker-compose up -d
