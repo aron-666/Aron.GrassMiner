@@ -6,7 +6,6 @@
 # Aron.GrassMiner 
 使用.Net 8撰寫
 
-# 03/18 目前api.getgrass.io 伺服器掛了，無法登入，原本就在挖礦的機器不受影響。
 
 ## 好用請支持，使用我的推薦碼註冊: RI3NGc63lVmUQix
 [立即註冊 app.getgrass.io](https://app.getgrass.io/register/?referralCode=RI3NGc63lVmUQix)
