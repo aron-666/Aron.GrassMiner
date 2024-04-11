@@ -65,4 +65,7 @@ Others' Introduction: [Binance Article](https://www.binance.com/zh-TC/feed/post/
 
 ## Update Log
 2024-03-18: Added UI information, fixed login functionality, UI beautification (I'm terrible at frontend).
+
 2024-03-18: Added version update notification, Proxy settings.
+
+2024-04-11: Added Proxy auth.
