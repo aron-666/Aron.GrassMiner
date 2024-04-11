@@ -6,6 +6,8 @@
 # Aron.GrassMiner 
 使用.Net 8撰寫
 
+# 03/18 目前api.getgrass.io 伺服器掛了，無法登入，原本就在挖礦的機器不受影響。
+
 ## 好用請支持，使用我的推薦碼註冊: RI3NGc63lVmUQix
 [立即註冊 app.getgrass.io](https://app.getgrass.io/register/?referralCode=RI3NGc63lVmUQix)
 
@@ -48,11 +50,7 @@ Grass挖礦不吃硬體，吃少許流量(每秒10-30KB)，就可以進行挖礦
 
 3. 執行
    ```
-<<<<<<< HEAD
-   //cmd請先 cd 到資料夾目錄
-=======
    //cmd請先 cd 到資料夾目錄(docker-install)
->>>>>>> develop
    docker compose up -d
    或
    docker-compose up -d

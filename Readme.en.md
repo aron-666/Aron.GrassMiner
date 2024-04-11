@@ -47,11 +47,7 @@ Others' Introduction: [Binance Article](https://www.binance.com/zh-TC/feed/post/
 
 3. Execute
    ```
-<<<<<<< HEAD
-   //cmd, navigate to the directory first
-=======
    //cmd, navigate to the directory first (docker-install)
->>>>>>> develop
    docker compose up -d
    or
    docker-compose up -d
