@@ -286,9 +286,8 @@ namespace SoftEtherVPNCmdNETCore.VPNClient
         /// <exception cref="NotImplementedException"></exception>
         public async Task AccountPasswordSet(string name, string password, AuthenticationType type)
         {
-            throw new NotImplementedException();
-            string output = await cmd.ExecuteCommand(host, "CLIENT", "AccountPasswordSet", $"{name} /PASSWORD:{password} /TYPE:{type}", password: password);
-
+            string output = await cmd.ExecuteCommand(host, "CLIENT", "AccountPasswordSet", $"{name} /PASSWORD:{password} /TYPE:{type}", password: this.password);
+            Console.WriteLine(output);
         }
 
         /// <summary>
@@ -690,9 +689,10 @@ namespace SoftEtherVPNCmdNETCore.VPNClient
         /// <param name="name"></param>
         /// <param name="mac"></param>
         /// <exception cref="NotImplementedException"></exception>
-        public void NicSetSetting(string name, string mac)
+        public async Task NicSetSetting(string name, string mac)
         {
-            throw new NotImplementedException();
+            await cmd.ExecuteCommand(host, "CLIENT", "NicSet", name, mac, password);
+
         }
 
         /// <summary>

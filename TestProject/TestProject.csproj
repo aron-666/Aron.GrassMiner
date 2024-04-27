@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Aron.GrassMiner\Aron.GrassMiner.csproj" />
+    <ProjectReference Include="..\SoftEtherVPNCmdNETCore\SoftEtherVPNCmdNETCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

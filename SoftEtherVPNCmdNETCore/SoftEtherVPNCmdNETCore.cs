@@ -52,7 +52,6 @@ namespace SoftEtherVPNCmdNETCore
                     UseShellExecute = false
                 }
             };
-
             process.Start();
             //string[] parms = parameters.Split(' ');
             //foreach (var c in parms)
@@ -94,6 +93,8 @@ namespace SoftEtherVPNCmdNETCore
             //Exclude the Connected to IP line and newline character
             return output.Substring(output.IndexOf('\n') + 2); 
         }
+
+        
 
         /// <summary>
         /// Function parses CSV format from SoftEther

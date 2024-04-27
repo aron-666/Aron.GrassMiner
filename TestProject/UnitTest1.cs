@@ -1,4 +1,5 @@
 using Aron.GrassMiner.Jobs;
+using SoftEtherVPNCmdNETCore.VPNClient;
 
 namespace TestProject
 {
@@ -10,10 +11,18 @@ namespace TestProject
         }
 
         [Test]
-        public void Test1()
+        public async Task Test1()
         {
+            string vpnName = "test";
+            VpnClient vpnClient = new VpnClient(@"C:\Program Files\SoftEther VPN Client\vpncmd.exe");
 
-            var s =VPNJob.GetDefaultGateway("VPN - VPN Client");
+            await vpnClient.AccountCreate(vpnName, "aronhome.com:1194", "ncku", "vms2", "VPN5");
+            await vpnClient.AccountPasswordSet(vpnName, "JIHc76aasf614dcStgnEws55c4dvbnn", AuthenticationType.Standard);
+            await vpnClient.AccountConnect(vpnName);
+
+            Assert.Pass();
         }
+
+
     }
 }
