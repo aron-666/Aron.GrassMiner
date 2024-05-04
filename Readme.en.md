@@ -69,3 +69,5 @@ Others' Introduction: [Binance Article](https://www.binance.com/zh-TC/feed/post/
 2024-03-18: Added version update notification, Proxy settings.
 
 2024-04-11: Added Proxy auth.
+
+2024-05-04: Upgrade extension
