@@ -1,15 +1,11 @@
 ![Total Visitors](https://komarev.com/ghpvc/?username=aron-666miner&color=green)
 
-<<<<<<< HEAD
-=======
 [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/aron-666/Aron.GrassMiner/blob/master/Readme.en.md)
 [![中文](https://img.shields.io/badge/lang-中文-blue.svg)](https://github.com/aron-666/Aron.GrassMiner)
 
->>>>>>> 06d5671 (Update README.md)
 # Aron.GrassMiner 
 使用.Net 8撰寫
 
-# 03/18 目前api.getgrass.io 伺服器掛了，無法登入，原本就在挖礦的機器不受影響。
 
 ## 好用請支持，使用我的推薦碼註冊: RI3NGc63lVmUQix
 [立即註冊 app.getgrass.io](https://app.getgrass.io/register/?referralCode=RI3NGc63lVmUQix)
@@ -43,7 +39,7 @@ Grass挖礦不吃硬體，吃少許流量(每秒10-30KB)，就可以進行挖礦
    GRASS_PASS=你的 Grass 密碼
    ADMIN_USER=後臺管理帳號(自訂義)
    ADMIN_PASS=後臺管理密碼(自訂義)
-   PROXY_ENABLE="true" / "false"
+   PROXY_ENABLE=true / false
    PROXY_HOST=http(s)://host:port
    PROXY_USER=user
    PROXY_PASS=pass

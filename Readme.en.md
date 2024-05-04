@@ -37,7 +37,7 @@ Others' Introduction: [Binance Article](https://www.binance.com/zh-TC/feed/post/
    GRASS_PASS=Your Grass password
    ADMIN_USER=Backend management account (customizable)
    ADMIN_PASS=Backend management password (customizable)
-   PROXY_ENABLE="true" / "false"
+   PROXY_ENABLE=true / false
    PROXY_HOST=http(s)://host:port
    PROXY_USER=user
    PROXY_PASS=pass
@@ -65,4 +65,7 @@ Others' Introduction: [Binance Article](https://www.binance.com/zh-TC/feed/post/
 
 ## Update Log
 2024-03-18: Added UI information, fixed login functionality, UI beautification (I'm terrible at frontend).
+
 2024-03-18: Added version update notification, Proxy settings.
+
+2024-04-11: Added Proxy auth.
