@@ -10,3 +10,4 @@ services:
       - ADMIN_PASS=admin
     ports:
       - 5001:8080
+    restart: always
