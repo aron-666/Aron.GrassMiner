@@ -185,7 +185,7 @@ namespace GrassMiner.Services
                             _minerRecord.Points = nextSiblingElement?.Text ?? "";
                             IWebElement element = driver.FindElement(By.XPath("//p[starts-with(., 'Network quality:')]"));
                             _minerRecord.NetworkQuality = element.Text.Replace("Network quality:", "");
-                            IWebElement? userNameElement = driver.FindElement(By.CssSelector("span[title='Username']"));
+                            //IWebElement? userNameElement = driver.FindElement(By.CssSelector("span[title='Username']"));
                             _minerRecord.IsConnected = true;
                         }
                     }
