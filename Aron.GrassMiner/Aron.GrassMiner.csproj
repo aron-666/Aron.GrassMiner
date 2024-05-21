@@ -12,8 +12,8 @@
     <NeutralLanguage>zh-TW</NeutralLanguage>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/aron-666/Aron.GrassMiner</RepositoryUrl>
-    <FileVersion>1.0.1.5</FileVersion>
-    <AssemblyVersion>1.0.1.5</AssemblyVersion>
+    <FileVersion>1.0.1.6</FileVersion>
+    <AssemblyVersion>1.0.1.6</AssemblyVersion>
     <Version>$(AssemblyVersion)</Version>
   </PropertyGroup>
 
