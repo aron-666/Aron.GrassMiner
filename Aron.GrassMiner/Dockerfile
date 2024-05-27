@@ -23,6 +23,7 @@ WORKDIR /app
 RUN apt update && apt-get install -y wget
 RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 RUN apt-get install -y ./google-chrome-stable_current_amd64.deb
+RUN rm google-chrome-stable_current_amd64.deb
 
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Aron.GrassMiner.dll"]
