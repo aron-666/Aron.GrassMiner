@@ -350,4 +350,5 @@ MigrationBackup/
 *.tar
 Aron.GrassMiner/db/
 
-Aron.GrassMiner/Aron.GrassMiner/Properties/launchSettings.json
+
+Aron.GrassMiner/Properties/launchSettings.json
