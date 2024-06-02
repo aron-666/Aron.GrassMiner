@@ -349,3 +349,5 @@ healthchecksdb
 MigrationBackup/
 *.tar
 Aron.GrassMiner/db/
+
+Aron.GrassMiner/Aron.GrassMiner/Properties/launchSettings.json
