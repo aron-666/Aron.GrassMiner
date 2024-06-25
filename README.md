@@ -10,9 +10,9 @@
 ## 好用請支持，使用我的推薦碼註冊: RI3NGc63lVmUQix
 [立即註冊 app.getgrass.io](https://app.getgrass.io/register/?referralCode=RI3NGc63lVmUQix)
 
-Grass 目前場外(未上市)價格來到 1:0.0036USDT
+Grass 目前場外(未上市)價格來到 1:0.001USDT
 
-掛滿一天可以挖1800顆 等於一天6.48USDT
+掛滿一天可以挖1800顆 等於一天1.8USDT
 
 Grass挖礦不吃硬體，吃少許流量(每秒10-30KB)，就可以進行挖礦。
 
@@ -39,7 +39,8 @@ Grass挖礦不吃硬體，吃少許流量(每秒10-30KB)，就可以進行挖礦
    GRASS_PASS=你的 Grass 密碼
    ADMIN_USER=後臺管理帳號(自訂義)
    ADMIN_PASS=後臺管理密碼(自訂義)
-   PROXY_ENABLE=true / false
+   IS_COMMUNITY=false (若要使用社區節點，請改為true)
+   PROXY_ENABLE=true # false
    PROXY_HOST=http(s)://host:port
    PROXY_USER=user
    PROXY_PASS=pass
@@ -71,3 +72,5 @@ Grass挖礦不吃硬體，吃少許流量(每秒10-30KB)，就可以進行挖礦
 2024-03-18: 加入版本更新提醒/Proxy設定
 
 2024-05-04: 更新擴充
+
+2024-06-25: 更新社區節點(須設定環境變數)

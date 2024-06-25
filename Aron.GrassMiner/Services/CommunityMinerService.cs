@@ -8,7 +8,7 @@ using System.Net;
 
 namespace GrassMiner.Services
 {
-    public class MinerService : IMinerService
+    public class CommunityMinerService : IMinerService
     {
         public ChromeDriver driver { get; set; }
         private readonly AppConfig _appConfig;
@@ -18,7 +18,7 @@ namespace GrassMiner.Services
         private Thread? thread;
 
         private DateTime BeforeRefresh = DateTime.MinValue;
-        public MinerService(AppConfig appConfig, MinerRecord minerRecord)
+        public CommunityMinerService(AppConfig appConfig, MinerRecord minerRecord)
         {
             _appConfig = appConfig;
             this._minerRecord = minerRecord;
@@ -98,7 +98,7 @@ namespace GrassMiner.Services
                 string password = _appConfig.Password;
 
                 // 設定 Chrome 擴充功能路徑
-                string extensionPath = "./Grass-Extension.crx";
+                string extensionPath = "./Grass-Extension-Community.crx";
                 string chromedriverPath = "./chromedriver";
 
                 // 建立 Chrome 選項
@@ -159,7 +159,7 @@ namespace GrassMiner.Services
                 }
 
 
-                driver.Navigate().GoToUrl("chrome-extension://ilehaonighjijnmpnagapkhpcdbhclfg/index.html");
+                driver.Navigate().GoToUrl("chrome-extension://lkbnfiajjmbhnfledhphioinpickokdi/index.html");
                 _minerRecord.Status = MinerStatus.Disconnected;
                 while (Enabled)
                 {
@@ -183,8 +183,14 @@ namespace GrassMiner.Services
                             IWebElement? nextSiblingElement = imageElement?.FindElement(By.XPath("following-sibling::*"));
 
                             _minerRecord.Points = nextSiblingElement?.Text ?? "";
-                            IWebElement element = driver.FindElement(By.XPath("//p[starts-with(., 'Network quality:')]"));
-                            _minerRecord.NetworkQuality = element.Text.Replace("Network quality:", "");
+                            // 使用XPath找到包含"Network Quality:"的第一個<p>元素
+                            IWebElement labelElement = driver.FindElement(By.XPath("//p[.='Network Quality:']"));
+
+                            // 使用XPath找到同一層級下的下一個<p>元素，它包含"75%"
+                            IWebElement valueElement = labelElement.FindElement(By.XPath("./following-sibling::p[1]"));
+
+                            // 獲取元素的文本值，這應該是"75%"
+                            _minerRecord.NetworkQuality = valueElement.Text;
                             //IWebElement? userNameElement = driver.FindElement(By.CssSelector("span[title='Username']"));
                             _minerRecord.IsConnected = true;
                         }
@@ -215,7 +221,7 @@ namespace GrassMiner.Services
                         {
                             BeforeRefresh = DateTime.Now;
                             //refresh
-                            driver.Navigate().GoToUrl("chrome-extension://ilehaonighjijnmpnagapkhpcdbhclfg/index.html");
+                            driver.Navigate().GoToUrl("chrome-extension://lkbnfiajjmbhnfledhphioinpickokdi/index.html");
                             SpinWait.SpinUntil(() => !Enabled, 15000);
                         }
                         Thread.Sleep(1000);

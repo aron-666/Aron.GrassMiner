@@ -35,6 +35,7 @@ Others' Introduction: [Binance Article](https://www.binance.com/zh-TC/feed/post/
    ```
    GRASS_USER=Your Grass account
    GRASS_PASS=Your Grass password
+   IS_COMMUNITY=false (To use community node, change to true)  
    ADMIN_USER=Backend management account (customizable)
    ADMIN_PASS=Backend management password (customizable)
    PROXY_ENABLE=true / false
@@ -71,3 +72,5 @@ Others' Introduction: [Binance Article](https://www.binance.com/zh-TC/feed/post/
 2024-04-11: Added Proxy auth.
 
 2024-05-04: Upgrade extension
+
+2024-06-25: Update community node (environment variables must be set)
