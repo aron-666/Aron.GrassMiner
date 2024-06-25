@@ -6,6 +6,7 @@ services:
     environment:
       - GRASS_USER=user
       - GRASS_PASS=password
+      - IS_COMMUNITY=false
       - ADMIN_USER=admin
       - ADMIN_PASS=admin
     ports:

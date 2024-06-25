@@ -9,9 +9,9 @@ namespace GrassMiner.Controllers
     public class MinerController : Controller
     {
         private readonly MinerRecord _minerRecord;
-        private readonly MinerService _minerService;
+        private readonly IMinerService _minerService;
 
-        public MinerController(MinerRecord minerRecord, MinerService minerService) 
+        public MinerController(MinerRecord minerRecord, IMinerService minerService) 
         {
             this._minerRecord = minerRecord;
             this._minerService = minerService;

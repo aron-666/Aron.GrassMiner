@@ -12,8 +12,8 @@
     <NeutralLanguage>zh-TW</NeutralLanguage>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/aron-666/Aron.GrassMiner</RepositoryUrl>
-    <FileVersion>1.0.1.7</FileVersion>
-    <AssemblyVersion>1.0.1.7</AssemblyVersion>
+    <FileVersion>1.0.1.8</FileVersion>
+    <AssemblyVersion>1.0.1.8</AssemblyVersion>
     <Version>$(AssemblyVersion)</Version>
   </PropertyGroup>
 
@@ -57,6 +57,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Grass-Extension-Community.crx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Grass-Extension.crx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

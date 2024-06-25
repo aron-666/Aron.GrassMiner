@@ -9,6 +9,7 @@ docker pull aron666/aron.grassminer
 3. 編輯docker-compose.ymal
 GRASS_USER=你的Garss帳號
 GRASS_PASS=你的Garss密碼
+IS_COMMUNITY=false (若要使用社區節點，請改為true)
 ADMIN_USER=後臺管理帳號(自訂義)
 ADMIN_PASS=後臺管理密碼(自訂義)
 PROXY_ENABLE=true / false
