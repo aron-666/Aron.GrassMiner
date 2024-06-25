@@ -86,6 +86,18 @@ if (Environment.GetEnvironmentVariables().Contains("PROXY_PASS"))
 {
     appConfig.ProxyUser = Environment.GetEnvironmentVariable("PROXY_PASS").ToString();
 }
+
+if(Environment.GetEnvironmentVariables().Contains("SHOW_CHROME"))
+{
+    appConfig.ShowChrome = bool.Parse(Environment.GetEnvironmentVariable("SHOW_CHROME").ToString());
+}
+
+if(Environment.GetEnvironmentVariables().Contains("IS_COMMUNITY"))
+{
+    appConfig.IsCommunity = bool.Parse(Environment.GetEnvironmentVariable("IS_COMMUNITY").ToString());
+}
+
+
 builder.Services.AddSingleton(appConfig);
 
 DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
@@ -129,7 +141,15 @@ context.Dispose();
 MinerRecord minerRecord = new MinerRecord();
 builder.Services.AddSingleton(minerRecord);
 
-MinerService minerService = new MinerService(appConfig, minerRecord);
+IMinerService minerService;
+if (appConfig.IsCommunity)
+{
+    minerService = new CommunityMinerService(appConfig, minerRecord);
+}
+else
+{
+    minerService = new MinerService(appConfig, minerRecord);
+}
 builder.Services.AddSingleton(minerService);
 
 builder.Services.AddQuartz(q =>
