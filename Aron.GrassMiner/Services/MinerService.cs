@@ -56,7 +56,7 @@ namespace GrassMiner.Services
                     }
                     finally
                     {
-                        Thread.Sleep(30000);
+                        Thread.Sleep(10000);
                     }
                 }
 
@@ -111,6 +111,7 @@ namespace GrassMiner.Services
                 options.AddArgument("--enable-javascript");
                 options.AddArgument("--auto-close-quit-quit");
                 options.AddArgument("disable-infobars");
+                options.AddArgument("--window-size=1024,768");
                 if ((_appConfig.ProxyEnable ?? "").ToLower() == "true"
                     && !string.IsNullOrEmpty(_appConfig.ProxyHost))
                 {
@@ -129,22 +130,58 @@ namespace GrassMiner.Services
                 driver = new ChromeDriver(options);
                 try
                 {
-                    driver.Navigate().GoToUrl("https://app.getgrass.io/");
-                    driver.Manage().Window.Size = new Size(1024, 768);
-
-                    _minerRecord.Status = MinerStatus.LoginPage;
+                    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
                     // 等待登录元素加载
-                    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
-                    IWebElement usernameElement = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("input[placeholder='Username or Email']")));
-                    usernameElement.SendKeys(userName);
+                    System.Threading.Thread.Sleep(2000);
+                    int errorCount = 0;
 
-                    IWebElement passwordElement = driver.FindElement(By.CssSelector("input[placeholder='Password']"));
-                    passwordElement.SendKeys(password);
+                    for (errorCount = 0; errorCount < 5; errorCount++)
+                    {
+                        driver.Navigate().GoToUrl("https://app.getgrass.io/");
+                        driver.Manage().Window.Size = new Size(1024, 768);
+                        _minerRecord.Status = MinerStatus.LoginPage;
 
-                    IWebElement loginButton = driver.FindElement(By.CssSelector("button[type='submit']"));
-                    loginButton.Click();
+                        System.Threading.Thread.Sleep(2000);
 
+                        wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
+                        IWebElement usernameElement = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("input[placeholder='Username or Email']")));
+                        usernameElement.SendKeys(userName);
+
+                        IWebElement passwordElement = driver.FindElement(By.CssSelector("input[placeholder='Password']"));
+                        passwordElement.SendKeys(password);
+
+                        IWebElement loginButton = driver.FindElement(By.CssSelector("button[type='submit']"));
+                        loginButton.Click();
+
+                        // 檢查頁面是否包含 "Something went wrong"
+                        bool isErrorPresent = false;
+                        try
+                        {
+                            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                            isErrorPresent = wait.Until(driver => driver.PageSource.ToLower().Contains("something went wrong"));
+                        }
+                        catch (WebDriverTimeoutException)
+                        {
+                            // 超時未找到該文本，不做任何處理
+                        }
+
+                        if (isErrorPresent)
+                        {
+                            _minerRecord.Status = MinerStatus.LoginError;
+                            _minerRecord.Exception = "Something went wrong";
+                            _minerRecord.ExceptionTime = DateTime.Now;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    if (errorCount >= 5)
+                    {
+                        return;
+                    }
                     // 等待登入完成
                     wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[contains(text(), 'Refresh')]")));
 
