@@ -6,32 +6,73 @@
 }
 
 <style>
-    .status-connected {
-        background-color: rgba(140, 248, 66, 0.8); /* 绿色 */
+
+    body {
+        background-color: #f8f9fa;
     }
 
-    .status-disconnected {
-        background-color: red; /* 红色 */
-    }
-
-    .status-appstart {
-        background-color: yellow; /* 黄色 */
+    .container {
+        margin-top: 50px;
     }
 
     .card {
-        border-radius: 10px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        text-align: left;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s;
     }
+
+    .card-body {
+        background-color: #ffffff;
+        border-radius: 15px;
+    }
+
+    #divUpdate a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+        #divUpdate a:hover {
+            text-decoration: underline;
+        }
 
     .card-text {
         font-size: 16px;
-        color: black;
     }
 
-    .card-text strong {
-        color: blue;
+        .card-text strong {
+            color: #333333;
+        }
+
+        .card-text span {
+            color: #555555;
+        }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 20px 0;
+    }
+
+    .status-connected {
+        background-color: #c3e6cb;
+        border-color: rgba(140, 248, 66, 0.8);
+        border-width: 15px;
+        color: #155724;
+    }
+
+    .status-disconnected {
+        background-color: #f5c6cb;
+        border-color: #721c24;
+        border-width: 15px;
+        color: #721c24;
+    }
+
+    .status-appstart {
+        background-color: #ffeeba;
+        border-color: #856404;
+        border-width: 15px;
+        color: #856404;
     }
 </style>
 <script>
@@ -47,6 +88,24 @@
     
     //更新卡片資訊
     setInterval(function () {
+
+        function updateCardStatus(data) {
+            const $card = $('#card');
+            const statusClasses = {
+                'Connected': 'status-connected',
+                'Disconnected': 'status-disconnected',
+                'Error': 'status-disconnected',
+                'Stop': 'status-disconnected',
+                'default': 'status-appstart'
+            };
+
+            // 移除所有狀態類別並添加新的類別
+            const newStatusClass = statusClasses[data.Status] || statusClasses['default'];
+            if (!$card.hasClass(newStatusClass)) {
+                $card.removeClass('status-connected status-disconnected status-appstart').addClass(newStatusClass);
+            }
+        }
+
         $(document).ready(function () {
             $.ajax({
                 url: 'Miner/GetMinerRecord',
@@ -88,31 +147,11 @@
                     if ($('#networkQuality').text() != data.NetworkQuality)
                         $('#networkQuality').text(data.NetworkQuality);
 
+                    if ($('#img1').attr('src') != data.Base64Image)
+                        $('#img1').attr('src', data.Base64Image);
 
-                    switch (data.Status) {
-                        case 'Connected':
-                            if (!$('#card').hasClass('status-connected')) {
-                                $('#card').removeClass().addClass('card');
-                                $('#card').addClass('status-connected');
-                            }
-                            break;
-                        case 'Disconnected':
-                        case 'Error':
-                        case 'Stop':
-                            if (!$('#card').hasClass('status-disconnected')) {
-                                $('#card').removeClass().addClass('card');
-                                $('#card').addClass('status-disconnected');
-                            }
-                            break;
-                        default:
-                            if (!$('#card').hasClass('status-appstart')) {
-                                $('#card').removeClass().addClass('card');
-                                $('#card').addClass('status-appstart');
 
-                            }
-
-                            break;
-                    }
+                    updateCardStatus(data);
 
                     if (data.Exception && data.status == "Error") {
                         $('#exMsg').show();
@@ -155,10 +194,8 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6 mb-4">
-            <div class="card status-connected" id="card">
-
+            <div class="card status-appstart" id="card">
                 <div class="card-body">
-
                     <div id="divUpdate">
                         <span id="updateMsg"></span>
                         <br />
@@ -166,27 +203,23 @@
                             前往更新
                         </a>
                         <br /><br />
-
                     </div>
                     <p class="card-text">
-                        
                         <strong>礦老闆: </strong> <span id="loginUserName"></span><br /><br />
                         <strong>狀態: </strong> <span id="status"></span><br /><br />
                         <strong>是否連線: </strong> <span id="isConnected"></span><br /><br />
                         <strong>外網IP: </strong> <span id="publicIp"></span><br /><br />
                         <strong>網路品質: </strong> <span id="networkQuality"></span><br /><br />
                         <strong>總工資: </strong> <span id="points"></span><br /><br />
-
                         <div id="recSec">
                             <strong>重連秒數: </strong> <span id="reconnectSeconds"></span><br /><br />
                         </div>
-
                         <div id="recCount">
                             <strong>重連次數: </strong> <span id="reconnectCounts"></span><br /><br />
                         </div>
-
-                        <p id="exMsg" style="display: none;"><strong>錯誤訊息: </strong> <span id="exception"></span><br /><br /></p>
-                        <p id="exTime" style="display: none;"><strong>錯誤時間: </strong> <span id="exceptionTime"></span><br /><br /></p>
+                    <p id="exMsg" style="display: none;"><strong>錯誤訊息: </strong> <span id="exception"></span><br /><br /></p>
+                    <p id="exTime" style="display: none;"><strong>錯誤時間: </strong> <span id="exceptionTime"></span><br /><br /></p>
+                    <img id="img1" src="" alt="狀態圖片" />
                     </p>
                 </div>
             </div>

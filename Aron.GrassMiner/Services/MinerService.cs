@@ -5,6 +5,7 @@ using OpenQA.Selenium;
 using SeleniumExtras.WaitHelpers;
 using GrassMiner.Models;
 using System.Net;
+using System.Drawing;
 
 namespace GrassMiner.Services
 {
@@ -129,6 +130,8 @@ namespace GrassMiner.Services
                 try
                 {
                     driver.Navigate().GoToUrl("https://app.getgrass.io/");
+                    driver.Manage().Window.Size = new Size(1024, 768);
+
                     _minerRecord.Status = MinerStatus.LoginPage;
 
                     // 等待登录元素加载
@@ -160,6 +163,8 @@ namespace GrassMiner.Services
 
 
                 driver.Navigate().GoToUrl("chrome-extension://ilehaonighjijnmpnagapkhpcdbhclfg/index.html");
+                driver.Manage().Window.Size = new Size(1024, 768);
+
                 _minerRecord.Status = MinerStatus.Disconnected;
                 while (Enabled)
                 {

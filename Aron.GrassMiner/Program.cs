@@ -87,12 +87,12 @@ if (Environment.GetEnvironmentVariables().Contains("PROXY_PASS"))
     appConfig.ProxyUser = Environment.GetEnvironmentVariable("PROXY_PASS").ToString();
 }
 
-if(Environment.GetEnvironmentVariables().Contains("SHOW_CHROME"))
+if (Environment.GetEnvironmentVariables().Contains("SHOW_CHROME"))
 {
     appConfig.ShowChrome = bool.Parse(Environment.GetEnvironmentVariable("SHOW_CHROME").ToString());
 }
 
-if(Environment.GetEnvironmentVariables().Contains("IS_COMMUNITY"))
+if (Environment.GetEnvironmentVariables().Contains("IS_COMMUNITY"))
 {
     appConfig.IsCommunity = bool.Parse(Environment.GetEnvironmentVariable("IS_COMMUNITY").ToString());
 }
@@ -170,6 +170,17 @@ builder.Services.AddQuartz(q =>
             .WithIntervalInMinutes(10)
             .RepeatForever())
     );
+
+    var jobKey2 = new JobKey("ScreensShotJob");
+    q.AddJob<ScreensShotJob>(jobKey2);
+    q.AddTrigger(t => t
+           .WithIdentity("ScreensShotJob")
+                  .ForJob(jobKey2)
+                         .StartNow()
+                                .WithSimpleSchedule(x => x
+                                           .WithIntervalInSeconds(5)
+                                                      .RepeatForever())
+                                   );
 });
 
 builder.Services.AddQuartzHostedService(opt =>

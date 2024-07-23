@@ -99,5 +99,8 @@ namespace GrassMiner.Models
         [Display(Name = "網路品質")]
         public string? NetworkQuality { get; set; }
 
+        [Display(Name = "圖片")]
+        public string? Base64Image { get; set; }
+
     }
 }
