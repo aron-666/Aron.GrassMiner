@@ -192,7 +192,7 @@ namespace GrassMiner.Services
                     driver.Navigate().GoToUrl("https://api.getgrass.io/");
 
                     //等待頁面中包含 "json-formatter-container" class
-                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                    var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
                     wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("json-formatter-container")));
 
                     //設定 cookie
