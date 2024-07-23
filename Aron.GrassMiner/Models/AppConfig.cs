@@ -18,5 +18,7 @@
 
         public string? ProxyUser { get; set; } 
         public string? ProxyPass { get; set; }
+
+        public bool LogEnable { get; set; } = false;
     }
 }
