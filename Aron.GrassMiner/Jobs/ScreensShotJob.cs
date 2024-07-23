@@ -29,7 +29,6 @@ namespace Aron.GrassMiner.Jobs
                 Screenshot screenshot = ((ITakesScreenshot)minerService.driver).GetScreenshot();
                 _minerRecord.Base64Image = "data:image/png;base64," + screenshot.AsBase64EncodedString;
 
-                Console.WriteLine("截圖已保存");
             }
             catch (Exception e)
             {

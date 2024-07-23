@@ -128,6 +128,11 @@ namespace GrassMiner.Services
                 options.AddExcludedArgument("enable-automation");
                 options.AddUserProfilePreference("credentials_enable_service", false);
                 options.AddUserProfilePreference("profile.password_manager_enabled", false);
+
+                options.AddArgument("--disable-gpu"); // 禁用 GPU 加速，减少资源占用
+                options.AddArgument("--disable-software-rasterizer"); // 禁用软件光栅化器
+                options.AddArgument("--disable-dev-shm-usage"); // 禁用 /dev/shm 临时文件系统
+                options.AddArgument("--force-dark-mode");
                 options.AddExtension(extensionPath);
 
                 // 建立 Chrome 瀏覽器
@@ -135,10 +140,29 @@ namespace GrassMiner.Services
                 try
                 {
                     driver.Navigate().GoToUrl("https://app.getgrass.io/");
+                    Console.WriteLine("Go to app: " + driver.Url);
 
-                    //等待頁面中包含 "Sign In"
-                    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
-                    wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("input[placeholder='Username or Email']")));
+                    Thread.Sleep(5000);
+                    if(!
+                    SpinWait.SpinUntil(() =>
+                    {
+                        try
+                        {
+                            return driver.PageSource.Contains("Sign In.");
+
+                        }
+                        catch (Exception ex)
+                        {
+                            return false;
+                        }
+                    }, 30000)) 
+                    {
+                        _minerRecord.Status = MinerStatus.LoginError;
+                        _minerRecord.Exception = "登入頁面載入錯誤";
+                        _minerRecord.ExceptionTime = DateTime.Now;
+                        Console.WriteLine("登入頁面載入錯誤，Url: " + driver.Url);
+                        return;
+                    }
 
                     // post https://api.getgrass.io/login
                     HttpClient client = new HttpClient();
@@ -172,6 +196,7 @@ namespace GrassMiner.Services
                         _minerRecord.Status = MinerStatus.LoginError;
                         _minerRecord.Exception = "登入錯誤: " + response.StatusCode;
                         _minerRecord.ExceptionTime = DateTime.Now;
+                        Console.WriteLine("登入錯誤，Url: " + driver.Url);
                         return;
                     }
                     GrassLoinResp grassLoinResp = JsonConvert.DeserializeObject<GrassLoinResp>(responseContent);
@@ -193,10 +218,30 @@ namespace GrassMiner.Services
                     SetLocalStorageItem(driver, "userColorMode", "\"dark\"");
 
                     driver.Navigate().GoToUrl("https://api.getgrass.io/");
+                    Console.WriteLine("Go to api: " + driver.Url);
+                    Thread.Sleep(5000);
 
                     //等待頁面中包含 "json-formatter-container" class
-                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-                    wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("json-formatter-container")));
+                    if (!SpinWait.SpinUntil(() =>
+                    {
+                        try
+                        {
+                            return driver.PageSource.Contains("json-formatter-container");
+
+                        }
+                        catch (Exception ex)
+                        {
+                            return false;
+                        }
+                    }, 30000))
+                    {
+                        _minerRecord.Status = MinerStatus.LoginError;
+                        _minerRecord.Exception = "api頁面載入錯誤: " + response.StatusCode;
+                        _minerRecord.ExceptionTime = DateTime.Now;
+                        Console.WriteLine("api頁面載入錯誤，Url: " + driver.Url);
+
+                        return;
+                    };
 
                     //設定 cookie
                     SetCookie(driver, "token", grassLoinResp.result.data.accessToken);
@@ -204,19 +249,47 @@ namespace GrassMiner.Services
 
 
                     driver.Navigate().GoToUrl("https://app.getgrass.io/dashboard");
+                    Console.WriteLine("Go to dashboard: " + driver.Url);
 
 
-                    // 等待登入完成
-                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
-                    wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[contains(text(), 'Refresh')]")));
+                    Thread.Sleep(5000);
 
-                    driver.FindElement(By.XPath("//*[contains(text(), 'Refresh')]")).Click();
 
-                    System.Threading.Thread.Sleep(5000);
+                    // 等待包含Refresh
+                    DateTime start = DateTime.Now;
+                    if (!SpinWait.SpinUntil(() =>
+                    {
+                        try
+                        {
+                            DateTime now = DateTime.Now;
+                            if ((now - start).TotalSeconds >= 10)
+                            {
+                                driver.Navigate().GoToUrl("https://app.getgrass.io/dashboard");
+                                Console.WriteLine("Go to dashboard: " + driver.Url);
+                                start = now;
+                            }
+                            return driver.PageSource.Contains("Refresh");
+
+                        }
+                        catch (Exception ex)
+                        {
+                            return false;
+                        }
+                        finally
+                        {
+                        }
+                    }, 60000))
+                    {
+                        _minerRecord.Status = MinerStatus.LoginError;
+                        _minerRecord.Exception = "dashboard頁面載入錯誤: " + response.StatusCode;
+                        _minerRecord.ExceptionTime = DateTime.Now;
+                        Console.WriteLine("dashboard頁面載入錯誤，Url: " + driver.Url);
+
+                        return;
+                    };
+                    Thread.Sleep(5000);
 
                     _minerRecord.LoginUserName = userName;
-
-
 
 
                 }
@@ -225,11 +298,13 @@ namespace GrassMiner.Services
                     _minerRecord.Status = MinerStatus.LoginError;
                     _minerRecord.Exception = ex.ToString();
                     _minerRecord.ExceptionTime = DateTime.Now;
+                    Console.WriteLine(ex);
                     return;
                 }
 
 
                 driver.Navigate().GoToUrl("chrome-extension://lkbnfiajjmbhnfledhphioinpickokdi/index.html");
+                Console.WriteLine("Go to extension: " + driver.Url);
                 driver.Manage().Window.Size = new Size(1024, 768);
 
 
@@ -270,6 +345,7 @@ namespace GrassMiner.Services
                     }
                     catch (Exception ex)
                     {
+                        Console.WriteLine(ex);
                         _minerRecord.Status = MinerStatus.Connected;
                     }
                     finally
@@ -307,6 +383,8 @@ namespace GrassMiner.Services
                 _minerRecord.Exception = ex.ToString();
                 _minerRecord.ExceptionTime = DateTime.Now;
                 _minerRecord.Status = MinerStatus.Error;
+                Console.WriteLine(ex);
+
             }
             finally
             {
