@@ -136,9 +136,7 @@ namespace GrassMiner.Services
                 {
                     driver.Navigate().GoToUrl("https://app.getgrass.io/");
 
-                    //等待頁面中包含 "Sign In"
-                    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
-                    wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("input[placeholder='Username or Email']")));
+                    Thread.Sleep(15000);
 
                     // post https://api.getgrass.io/login
                     HttpClient client = new HttpClient();
@@ -195,7 +193,7 @@ namespace GrassMiner.Services
                     driver.Navigate().GoToUrl("https://api.getgrass.io/");
 
                     //等待頁面中包含 "json-formatter-container" class
-                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
                     wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("json-formatter-container")));
 
                     //設定 cookie
@@ -207,16 +205,13 @@ namespace GrassMiner.Services
 
 
                     // 等待登入完成
-                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
+                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(40));
                     wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[contains(text(), 'Refresh')]")));
 
                     driver.FindElement(By.XPath("//*[contains(text(), 'Refresh')]")).Click();
 
                     System.Threading.Thread.Sleep(5000);
-
                     _minerRecord.LoginUserName = userName;
-
-
 
 
                 }
