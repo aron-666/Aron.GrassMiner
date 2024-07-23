@@ -74,3 +74,5 @@ Others' Introduction: [Binance Article](https://www.binance.com/zh-TC/feed/post/
 2024-05-04: Upgrade extension
 
 2024-06-25: Update community node (environment variables must be set)
+
+2024-07-24: Update Community Node / Fix Login Slowness Issue / Modify UI
