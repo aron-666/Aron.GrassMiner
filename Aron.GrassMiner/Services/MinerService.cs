@@ -6,6 +6,9 @@ using SeleniumExtras.WaitHelpers;
 using GrassMiner.Models;
 using System.Net;
 using System.Drawing;
+using Aron.GrassMiner.Models;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace GrassMiner.Services
 {
@@ -130,64 +133,85 @@ namespace GrassMiner.Services
                 driver = new ChromeDriver(options);
                 try
                 {
-                    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                    driver.Navigate().GoToUrl("https://app.getgrass.io/");
 
-                    // 等待登录元素加载
-                    System.Threading.Thread.Sleep(2000);
-                    int errorCount = 0;
+                    //等待頁面中包含 "Sign In"
+                    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                    wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("input[placeholder='Username or Email']")));
 
-                    for (errorCount = 0; errorCount < 5; errorCount++)
+                    // post https://api.getgrass.io/login
+                    HttpClient client = new HttpClient();
+                    var request = new HttpRequestMessage(HttpMethod.Post, "https://api.getgrass.io/login");
+                    request.Headers.Add("Accept", "*/*");
+                    request.Headers.Add("Accept-Encoding", "gzip, deflate, br, zstd");
+                    request.Headers.Add("Accept-Language", "zh-TW,zh;q=0.9");
+                    request.Headers.Add("Origin", "https://app.getgrass.io");
+                    request.Headers.Add("Priority", "u=1, i");
+                    request.Headers.Add("Referer", "https://app.getgrass.io/");
+                    request.Headers.Add("Sec-Ch-Ua", "\"Not/A)Brand\";v=\"8\", \"Chromium\";v=\"126\", \"Google Chrome\";v=\"126\"");
+                    request.Headers.Add("Sec-Ch-Ua-Mobile", "?0");
+                    request.Headers.Add("Sec-Ch-Ua-Platform", "\"Windows\"");
+                    request.Headers.Add("Sec-Fetch-Dest", "empty");
+                    request.Headers.Add("Sec-Fetch-Mode", "cors");
+                    request.Headers.Add("Sec-Fetch-Site", "same-site");
+                    request.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36");
+
+                    var content = JsonConvert.SerializeObject(new
                     {
-                        driver.Navigate().GoToUrl("https://app.getgrass.io/");
-                        driver.Manage().Window.Size = new Size(1024, 768);
-                        _minerRecord.Status = MinerStatus.LoginPage;
+                        username = userName,
+                        password = password
+                    });
+                    request.Content = new StringContent(content, Encoding.UTF8, "application/json");
 
-                        System.Threading.Thread.Sleep(2000);
+                    var response = client.SendAsync(request).GetAwaiter().GetResult();
+                    var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
-                        wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
-                        IWebElement usernameElement = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("input[placeholder='Username or Email']")));
-                        usernameElement.SendKeys(userName);
-
-                        IWebElement passwordElement = driver.FindElement(By.CssSelector("input[placeholder='Password']"));
-                        passwordElement.SendKeys(password);
-
-                        IWebElement loginButton = driver.FindElement(By.CssSelector("button[type='submit']"));
-                        loginButton.Click();
-
-                        // 檢查頁面是否包含 "Something went wrong"
-                        bool isErrorPresent = false;
-                        try
-                        {
-                            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-                            isErrorPresent = wait.Until(driver => driver.PageSource.ToLower().Contains("something went wrong"));
-                        }
-                        catch (WebDriverTimeoutException)
-                        {
-                            // 超時未找到該文本，不做任何處理
-                        }
-
-                        if (isErrorPresent)
-                        {
-                            _minerRecord.Status = MinerStatus.LoginError;
-                            _minerRecord.Exception = "Something went wrong";
-                            _minerRecord.ExceptionTime = DateTime.Now;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    if (errorCount >= 5)
+                    if (response.StatusCode != HttpStatusCode.OK)
                     {
+                        _minerRecord.Status = MinerStatus.LoginError;
+                        _minerRecord.Exception = "登入錯誤: " + response.StatusCode;
+                        _minerRecord.ExceptionTime = DateTime.Now;
                         return;
                     }
+                    GrassLoinResp grassLoinResp = JsonConvert.DeserializeObject<GrassLoinResp>(responseContent);
+                    if (grassLoinResp == null || grassLoinResp.result == null || grassLoinResp.result.data == null || string.IsNullOrEmpty(grassLoinResp.result.data.accessToken))
+                    {
+                        _minerRecord.Status = MinerStatus.LoginError;
+                        _minerRecord.Exception = "資料解析錯誤";
+                        _minerRecord.ExceptionTime = DateTime.Now;
+                        return;
+                    }
+
+                    //設定 chrome local storage
+                    SetLocalStorageItem(driver, "accessToken", $"\"{grassLoinResp.result.data.accessToken}\"");
+                    SetLocalStorageItem(driver, "refreshToken", $"\"{grassLoinResp.result.data.refreshToken}\"");
+                    SetLocalStorageItem(driver, "tokenExpiry", DateTimeOffset.UtcNow.AddYears(1).ToUnixTimeSeconds().ToString());
+                    SetLocalStorageItem(driver, "userId", $"\"{grassLoinResp.result.data.userId}\"");
+                    SetLocalStorageItem(driver, "isAuthenticated", "true");
+                    SetLocalStorageItem(driver, "chakra-ui-color-mode", "dark");
+                    SetLocalStorageItem(driver, "userColorMode", "\"dark\"");
+
+                    driver.Navigate().GoToUrl("https://api.getgrass.io/");
+
+                    //等待頁面中包含 "json-formatter-container" class
+                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                    wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("json-formatter-container")));
+
+                    //設定 cookie
+                    SetCookie(driver, "token", grassLoinResp.result.data.accessToken);
+
+
+
+                    driver.Navigate().GoToUrl("https://app.getgrass.io/dashboard");
+
+
                     // 等待登入完成
+                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
                     wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[contains(text(), 'Refresh')]")));
 
                     driver.FindElement(By.XPath("//*[contains(text(), 'Refresh')]")).Click();
 
-                    System.Threading.Thread.Sleep(20000);
+                    System.Threading.Thread.Sleep(5000);
                     _minerRecord.LoginUserName = userName;
                 }
                 catch (Exception ex)
@@ -276,6 +300,23 @@ namespace GrassMiner.Services
                 driver?.Quit();
                 driver = null;
             }
+        }
+
+        static void SetLocalStorageItem(IWebDriver driver, string key, string value)
+        {
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            js.ExecuteScript($"window.localStorage.setItem('{key}', '{value}');");
+        }
+
+        static void SetCookie(IWebDriver driver, string key, string value)
+        {
+            driver.Manage().Cookies.AddCookie(new OpenQA.Selenium.Cookie(key, value, "/", DateTime.UtcNow.AddYears(1)));
+        }
+
+        static string GetLocalStorageItem(IWebDriver driver, string key)
+        {
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            return (string)js.ExecuteScript($"return window.localStorage.getItem('{key}');");
         }
 
     }
