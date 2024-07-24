@@ -63,7 +63,7 @@ Grass挖礦不吃硬體，吃少許流量(每秒10-30KB)，就可以進行挖礦
      - Windows 要開機自動執行要去Docker Desktop設定改
 
 ## 2. 作為服務安裝
-1. Windows 即將更新
+1. Windows 已更新，請至Release下載，說明之後再補。
 2. Linux 即將更新
 
 ## 更新日誌
