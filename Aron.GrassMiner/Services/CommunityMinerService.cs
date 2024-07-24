@@ -1,15 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
-using OpenQA.Selenium;
-using SeleniumExtras.WaitHelpers;
+﻿using Aron.GrassMiner.Models;
 using GrassMiner.Models;
-using System.Net;
-using System.Drawing;
-using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using System.Drawing;
+using System.Net;
 using System.Text;
-using Aron.GrassMiner.Models;
 
 namespace GrassMiner.Services
 {
@@ -86,7 +82,9 @@ namespace GrassMiner.Services
         {
             try
             {
+                driver?.Close();
                 driver?.Quit();
+                driver?.Dispose();
                 driver = null;
                 _minerRecord.Status = MinerStatus.AppStart;
                 _minerRecord.IsConnected = false;
@@ -143,7 +141,7 @@ namespace GrassMiner.Services
                     Console.WriteLine("Go to app: " + driver.Url);
 
                     Thread.Sleep(5000);
-                    if(!
+                    if (!
                     SpinWait.SpinUntil(() =>
                     {
                         try
@@ -155,7 +153,7 @@ namespace GrassMiner.Services
                         {
                             return false;
                         }
-                    }, 30000)) 
+                    }, 30000))
                     {
                         _minerRecord.Status = MinerStatus.LoginError;
                         _minerRecord.Exception = "登入頁面載入錯誤";
@@ -388,7 +386,9 @@ namespace GrassMiner.Services
             }
             finally
             {
+                driver?.Close();
                 driver?.Quit();
+                driver?.Dispose();
                 driver = null;
             }
         }
