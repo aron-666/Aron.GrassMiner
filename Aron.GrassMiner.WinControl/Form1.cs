@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
+using System.Configuration;
 using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -10,93 +12,6 @@ namespace Aron.GrassMiner.WinControl
 {
     public partial class Form1 : Form
     {
-        private const int ERROR_INSUFFICIENT_BUFFER = 122;
-        private const int AF_INET = 2;
-        private const int MIB_TCP_STATE_ESTAB = 5;
-
-        [DllImport("iphlpapi.dll", SetLastError = true)]
-        static extern int GetExtendedTcpTable(byte[] buffer, ref int dwOutBufLen, bool sort, int ipVersion, TCP_TABLE_CLASS tblClass, int reserved = 0);
-        [StructLayout(LayoutKind.Sequential)]
-        private struct MIB_TCPTABLE_OWNER_PID
-        {
-            public uint dwNumEntries;
-            public MIB_TCPROW_OWNER_PID table;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        private struct MIB_TCPROW_OWNER_PID
-        {
-            public int state;
-            public int localAddr;
-            public int localPort;
-            public int remoteAddr;
-            public int remotePort;
-            public int owningPid;
-        }
-
-        private enum TCP_TABLE_CLASS
-        {
-            TCP_TABLE_BASIC_LISTENER,
-            TCP_TABLE_BASIC_CONNECTIONS,
-            TCP_TABLE_BASIC_ALL,
-            TCP_TABLE_OWNER_PID_LISTENER,
-            TCP_TABLE_OWNER_PID_CONNECTIONS,
-            TCP_TABLE_OWNER_PID_ALL,
-            TCP_TABLE_OWNER_MODULE_LISTENER,
-            TCP_TABLE_OWNER_MODULE_CONNECTIONS,
-            TCP_TABLE_OWNER_MODULE_ALL
-
-        }
-
-
-
-        private static List<int> GetTcpConnections(int pid)
-        {
-            int bufferSize = 0;
-            int result = GetExtendedTcpTable(null, ref bufferSize, true, AF_INET, TCP_TABLE_CLASS.TCP_TABLE_OWNER_MODULE_ALL, 0);
-            if (result != ERROR_INSUFFICIENT_BUFFER)
-            {
-                throw new InvalidOperationException("Failed to get table size.");
-            }
-
-            byte[] buffer = new byte[bufferSize];
-            result = GetExtendedTcpTable(buffer, ref bufferSize, true, AF_INET, TCP_TABLE_CLASS.TCP_TABLE_OWNER_MODULE_ALL, 0);
-            if (result != 0)
-            {
-                throw new InvalidOperationException("Failed to get TCP table.");
-            }
-
-            IntPtr tablePtr = Marshal.AllocHGlobal(bufferSize);
-            try
-            {
-                Marshal.Copy(buffer, 0, tablePtr, bufferSize);
-                var table = (MIB_TCPTABLE_OWNER_PID)Marshal.PtrToStructure(tablePtr, typeof(MIB_TCPTABLE_OWNER_PID));
-                int rowSize = Marshal.SizeOf(typeof(MIB_TCPROW_OWNER_PID));
-
-
-                List<int> ports = new List<int>();
-
-                for (int i = 0; i < table.dwNumEntries; i++)
-                {
-                    var rowPtr = (IntPtr)((long)tablePtr + Marshal.SizeOf(typeof(uint)) + (i * rowSize));
-                    var row = (MIB_TCPROW_OWNER_PID)Marshal.PtrToStructure(rowPtr, typeof(MIB_TCPROW_OWNER_PID));
-
-                    if (row.owningPid == pid)
-                    {
-                        ports.Add(IPAddress.NetworkToHostOrder((short)row.localPort));
-                        Console.WriteLine($"Local Address: {IPAddress.NetworkToHostOrder(row.localAddr)}:{IPAddress.NetworkToHostOrder((short)row.localPort)}, " +
-                                          $"Remote Address: {IPAddress.NetworkToHostOrder(row.remoteAddr)}:{IPAddress.NetworkToHostOrder((short)row.remotePort)}, " +
-                                          $"State: {row.state}");
-                    }
-                }
-                return ports;
-            }
-            finally
-            {
-                Marshal.FreeHGlobal(tablePtr);
-            }
-            return null;
-        }
         string appsetting = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json");
         string app = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "app");
         string exe = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "app", "Aron.GrassMiner.exe");
@@ -107,26 +22,34 @@ namespace Aron.GrassMiner.WinControl
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //var temp = new TodoCheckBox();
-            //temp.Name = ckServiceInstalled.Name;
-            //temp.Text = ckServiceInstalled.Text;
-            //temp.Checked = ckServiceInstalled.Checked;
-            //temp.Location = ckServiceInstalled.Location;
-            //temp.Size = ckServiceInstalled.Size;
-            //temp.Font = ckServiceInstalled.Font;
-            //temp.AutoSize = ckServiceInstalled.AutoSize;
-            //temp.CheckedChanged += (s, e) =>
-            //{
-            //    ckServiceInstalled.Checked = temp.Checked;
-            //};
-            //groupBox1.Controls.Add(temp);
-            //groupBox1.Controls.Remove(ckServiceInstalled);
-            //ckServiceInstalled.Dispose();
-            //ckServiceInstalled = temp;
-            //ckServiceInstalled.BringToFront();
-            //groupBox1.ResumeLayout(false);
-            //groupBox1.PerformLayout();
+        }
 
+        private bool IsAppRunning(out Process? prc)
+        {
+            try
+            {
+                //檢查是否正在執行
+                prc = Process.GetProcesses()
+                    .FirstOrDefault(p =>
+                    {
+                        try
+                        {
+                            return string.Equals(p.MainModule.FileName, exe, StringComparison.OrdinalIgnoreCase);
+
+                        }
+                        catch (Exception)
+                        {
+                            return false;
+                        }
+                    });
+                return prc != null;
+            }
+            catch (Exception ex)
+            {
+                prc = null;
+                MessageBox.Show(ex.ToString());
+                return false;
+            }
 
         }
 
@@ -142,139 +65,314 @@ namespace Aron.GrassMiner.WinControl
             }
         }
 
-        private void btnControl_Click(object sender, EventArgs e)
+        private void ckServiceInstalled_Click(object sender, EventArgs e)
         {
-            
-            //檢查是否正在執行
-            var prc = Process.GetProcesses()
-                .FirstOrDefault(p =>
-                {
-                    try
-                    {
-                        return string.Equals(p.MainModule.FileName, exe, StringComparison.OrdinalIgnoreCase);
-
-                    }
-                    catch (Exception)
-                    {
-                        return false;
-                    }
-                });
-            if (prc != null)
+            if(IsAppRunning(out var prc))
             {
-                // 傳送中止指令
-                prc.Kill();
+                MessageBox.Show("Please stop the app first.");
                 return;
+            }
+            if (!ckServiceInstalled.Checked)
+            {
+                
+                UninstallService();
+            }
+            else
+            {
+                InstallService();
+            }
+
+        }
+
+        private bool IsInstalledService()
+        {
+            try
+            {
+                // sc query GrassMiner
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = "sc";
+                startInfo.Arguments = $"query GrassMiner";
+                startInfo.UseShellExecute = false;
+                startInfo.RedirectStandardOutput = true;
+                startInfo.RedirectStandardError = true;
+                startInfo.CreateNoWindow = true;
+                Process process = new Process();
+                process.StartInfo = startInfo;
+                process.Start();
+                string output = process.StandardOutput.ReadToEnd();
+                return output.Contains("SERVICE_NAME: GrassMiner");
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
 
 
-            //run dotnet app\Aron.GrassMiner.dll
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.WorkingDirectory = app;
-            startInfo.FileName = exe;
-            startInfo.EnvironmentVariables["ASPNETCORE_ENVIRONMENT"] = appsetting;
+        }
+        private void InstallService()
+        {
+            try
+            {
+                //install service
+                //sc create GrassMiner binPath= "C:\Users\Aron\source\repos\Aron.GrassMiner\Aron.GrassMiner\bin\Debug\net5.0\Aron.GrassMiner.exe"
+                //sc start GrassMiner
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = "sc";
+                startInfo.Arguments = $"create GrassMiner binPath= \"{exe}\" start=auto";
+                startInfo.UseShellExecute = false;
+                startInfo.RedirectStandardOutput = false;
+                startInfo.RedirectStandardError = false;
+                startInfo.CreateNoWindow = true;
+                Process process = new Process();
+                process.StartInfo = startInfo;
+                process.Start();
+                process.WaitForExit();
+                process.Close();
 
-            startInfo.UseShellExecute = false;
-            startInfo.RedirectStandardOutput = false;
-            startInfo.RedirectStandardError = false;
-            startInfo.CreateNoWindow = true;
-            Process process = new Process();
-            process.StartInfo = startInfo;
+                // description
+                // sc description GrassMiner "Grass Miner Service"
+                startInfo.Arguments = $"description GrassMiner \"Grass Miner Service\"";
+                process.StartInfo = startInfo;
+                process.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
 
-            process.Start();
+        }
+
+        private void StartService()
+        {
+            try
+            {
+                //start service
+                //sc start GrassMiner
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = "sc";
+                startInfo.Arguments = $"start GrassMiner";
+                startInfo.UseShellExecute = false;
+                startInfo.RedirectStandardOutput = false;
+                startInfo.RedirectStandardError = false;
+                startInfo.CreateNoWindow = true;
+                Process process = new Process();
+                process.StartInfo = startInfo;
+                process.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
+        }
+
+        private void StopService()
+        {
+            try
+            {
+                //stop service
+                //sc stop GrassMiner
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = "sc";
+                startInfo.Arguments = $"stop GrassMiner";
+                startInfo.UseShellExecute = false;
+                startInfo.RedirectStandardOutput = false;
+                startInfo.RedirectStandardError = false;
+                startInfo.CreateNoWindow = true;
+                Process process = new Process();
+                process.StartInfo = startInfo;
+                process.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
+        }
+
+        private void UninstallService()
+        {
+            try
+            {
+                //uninstall service
+                //sc stop GrassMiner
+                //sc delete GrassMiner
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = "sc";
+                startInfo.Arguments = $"stop GrassMiner";
+                startInfo.UseShellExecute = false;
+                startInfo.RedirectStandardOutput = false;
+                startInfo.RedirectStandardError = false;
+                startInfo.CreateNoWindow = true;
+                Process process = new Process();
+                process.StartInfo = startInfo;
+                process.Start();
+
+                process.WaitForExit();
+                process.Close();
+
+                startInfo.Arguments = $"delete GrassMiner";
+                process.StartInfo = startInfo;
+                process.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
+        }
+
+        private void btnControl_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //檢查是否正在執行
+                if (IsAppRunning(out var prc))
+                {
+                    // 傳送中止指令
+                    File.Create(Path.Combine(app, "shutdown.flag")).Close();
+                    return;
+                }
+                //檢查是否安裝Service
+                if (IsInstalledService())
+                {
+                    //啟動Service
+                    StartService();
+                    return;
+                }
+
+
+
+                //run dotnet app\Aron.GrassMiner.dll
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.WorkingDirectory = app;
+                startInfo.FileName = exe;
+                startInfo.EnvironmentVariables["ASPNETCORE_ENVIRONMENT"] = appsetting;
+
+                startInfo.UseShellExecute = false;
+                startInfo.RedirectStandardOutput = false;
+                startInfo.RedirectStandardError = false;
+                startInfo.CreateNoWindow = true;
+                Process process = new Process();
+                process.StartInfo = startInfo;
+
+                process.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
+
 
         }
 
         private void btnLogs_Click(object sender, EventArgs e)
         {
-            //open file explorer to app\\logs
+            try
+            {
+                //open file explorer to app\\logs
 
-            string app = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "app");
-            string logs = Path.Combine(app, "logs");
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.FileName = "explorer.exe";
-            startInfo.Arguments = logs;
-            startInfo.UseShellExecute = false;
-            startInfo.RedirectStandardOutput = false;
-            startInfo.RedirectStandardError = false;
-            startInfo.CreateNoWindow = false;
-            Process process = new Process();
-            process.StartInfo = startInfo;
-            process.Start();
+                string app = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "app");
+                string logs = Path.Combine(app, "logs");
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = "explorer.exe";
+                startInfo.Arguments = logs;
+                startInfo.UseShellExecute = false;
+                startInfo.RedirectStandardOutput = false;
+                startInfo.RedirectStandardError = false;
+                startInfo.CreateNoWindow = false;
+                Process process = new Process();
+                process.StartInfo = startInfo;
+                process.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
+
 
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            //檢查是否正在執行
-            var prc = Process.GetProcesses()
-                .FirstOrDefault(p =>
-                {
-                    try
-                    {
-                        return string.Equals(p.MainModule.FileName, exe, StringComparison.OrdinalIgnoreCase);
-
-                    }
-                    catch (Exception)
-                    {
-                        return false;
-                    }
-                });
-
-            if (prc != null)
+            try
             {
-                btnControl.Text = "Stop";
-                lbModule.BackColor = Color.Green;
-                lbPid.Text = prc.Id.ToString();
-                var xxx = GetTcpConnections(prc.Id);
-                if(xxx.Count > 0)
+                if (IsAppRunning(out var prc))
                 {
-                    lbPorts.Text = xxx.Select(x => x.ToString()).Aggregate((x, y) =>
-                    string.IsNullOrEmpty(y) ? x ?? "" : $"{x}, {y}");
+                    btnControl.Text = "Stop";
+                    lbModule.BackColor = Color.Green;
+                    lbPid.Text = prc?.Id.ToString();
+
                 }
                 else
                 {
-                    lbPorts.Text = "";
+                    btnControl.Text = "Start";
+                    lbModule.BackColor = Color.Transparent;
+                    lbPid.Text = "";
+                }
+
+                if (IsInstalledService())
+                {
+                    ckServiceInstalled.Checked = true;
+                }
+                else
+                {
+                    ckServiceInstalled.Checked = false;
                 }
             }
-            else
+            catch (Exception ex)
             {
-                btnControl.Text = "Start";
-                lbModule.BackColor = Color.Transparent;
-                lbPid.Text = "";
-                lbPorts.Text = "";
             }
 
 
+
+
+        }
+
+        private void btnAdmin_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (IsAppRunning(out var prc))
+                {
+                    IConfiguration Configuration = new ConfigurationBuilder()
+                        .AddJsonFile(appsetting, optional: true, reloadOnChange: true)
+                        .Build();
+
+                    //Kestrel.EndPoints.Http.Url
+                    string url = Configuration["Kestrel:EndPoints:Http:Url"];
+                    ProcessStartInfo startInfo = new ProcessStartInfo();
+                    startInfo.FileName = url;
+                    startInfo.UseShellExecute = true;
+                    startInfo.RedirectStandardOutput = false;
+                    startInfo.RedirectStandardError = false;
+                    startInfo.CreateNoWindow = false;
+                    Process process = new Process();
+                    process.StartInfo = startInfo;
+                    process.Start();
+
+                }
+                else
+                {
+                    MessageBox.Show("Please start the app first.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
+        }
+
+        private void btnConfig_Click(object sender, EventArgs e)
+        {
+            ConfigForm configForm = new ConfigForm();
+            configForm.ShowDialog();
+
         }
     }
 }
 
 
-public class TodoCheckBox : CheckBox
-{
-    public override bool AutoSize
-    {
-        get => base.AutoSize;
-        set => base.AutoSize = false;
-    }
-
-    public TodoCheckBox()
-    {
-        this.TextAlign = ContentAlignment.MiddleRight;
-    }
-
-    protected override void OnPaint(PaintEventArgs e)
-    {
-        base.OnPaint(e);
-        int h = this.ClientSize.Height - 2;
-        var rc = new Rectangle(new Point(-1, this.Height / 2 - h / 2), new Size(h, h));
-        if (this.FlatStyle == FlatStyle.Flat)
-        {
-            ControlPaint.DrawCheckBox(e.Graphics, rc, this.Checked ? ButtonState.Flat | ButtonState.Checked : ButtonState.Flat | ButtonState.Normal);
-        }
-        else
-        {
-            ControlPaint.DrawCheckBox(e.Graphics, rc, this.Checked ? ButtonState.Checked : ButtonState.Normal);
-        }
-    }
-}

@@ -407,3 +407,80 @@ WHERE "a"."UserId" = @__user_Id_0
 2024-07-24 07:13:01.2894 INFO Adding 2 jobs, 2 triggers.
 2024-07-24 07:13:01.2985 INFO Adding job: DEFAULT.UpdateIpJob
 2024-07-24 07:13:01.4277 INFO Adding job: DEFAULT.ScreensShotJob
+2024-07-24 07:40:57.9706 INFO User profile is available. Using 'C:\Users\Aron\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-07-24 07:40:58.2235 INFO Initialized Scheduler Signaller of type: Quartz.Core.SchedulerSignalerImpl
+2024-07-24 07:40:58.2235 INFO Quartz Scheduler created
+2024-07-24 07:40:58.2235 INFO JobFactory set to: Quartz.Simpl.MicrosoftDependencyInjectionJobFactory
+2024-07-24 07:40:58.2235 INFO RAMJobStore initialized.
+2024-07-24 07:40:58.2235 INFO Quartz Scheduler 3.8.1.0 - 'QuartzScheduler' with instanceId 'NON_CLUSTERED' initialized
+2024-07-24 07:40:58.2235 INFO Using thread pool 'Quartz.Simpl.DefaultThreadPool', size: 10
+2024-07-24 07:40:58.2235 INFO Using job store 'Quartz.Simpl.RAMJobStore', supports persistence: False, clustered: False
+2024-07-24 07:40:58.2354 INFO Adding 2 jobs, 2 triggers.
+2024-07-24 07:40:58.2354 INFO Adding job: DEFAULT.UpdateIpJob
+2024-07-24 07:40:58.2442 INFO Adding job: DEFAULT.ScreensShotJob
+2024-07-24 07:40:58.3284 INFO Now listening on: https://localhost:50914
+2024-07-24 07:40:58.3284 INFO Now listening on: http://localhost:50915
+2024-07-24 07:40:58.3284 INFO Application started. Press Ctrl+C to shut down.
+2024-07-24 07:40:58.3284 INFO Hosting environment: Development
+2024-07-24 07:40:58.3284 INFO Content root path: C:\Users\Aron\Desktop\Project\Aron.GrassMiner\Aron.GrassMiner
+2024-07-24 07:40:58.3284 INFO Scheduler QuartzScheduler_$_NON_CLUSTERED started.
+2024-07-24 07:41:00.2725 INFO Request starting HTTP/2 GET https://localhost:50914/ - - -
+2024-07-24 07:41:00.3160 INFO Executing endpoint 'GrassMiner.Controllers.HomeController.Index (Aron.GrassMiner)'
+2024-07-24 07:41:00.3160 INFO Route matched with {action = "Index", controller = "Home", page = "", area = ""}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller GrassMiner.Controllers.HomeController (Aron.GrassMiner).
+2024-07-24 07:41:00.3221 INFO Executing RedirectResult, redirecting to /Miner.
+2024-07-24 07:41:00.3221 INFO Executed action GrassMiner.Controllers.HomeController.Index (Aron.GrassMiner) in 2.7831ms
+2024-07-24 07:41:00.3221 INFO Executed endpoint 'GrassMiner.Controllers.HomeController.Index (Aron.GrassMiner)'
+2024-07-24 07:41:00.3221 INFO Request finished HTTP/2 GET https://localhost:50914/ - 302 0 - 57.6051ms
+2024-07-24 07:41:00.3221 INFO Request starting HTTP/2 GET https://localhost:50914/Miner - - -
+2024-07-24 07:41:00.3395 INFO Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-07-24 07:41:00.3623 INFO AuthenticationScheme: Identity.Application was challenged.
+2024-07-24 07:41:00.3623 INFO Request finished HTTP/2 GET https://localhost:50914/Miner - 302 0 - 29.0788ms
+2024-07-24 07:41:00.3623 INFO Request starting HTTP/2 GET https://localhost:50914/Identity/Account/Login?ReturnUrl=%2FMiner - - -
+2024-07-24 07:41:00.3623 INFO Executing endpoint '/Account/Login'
+2024-07-24 07:41:00.3796 INFO Route matched with {page = "/Account/Login", area = "Identity", action = "", controller = ""}. Executing page /Account/Login
+2024-07-24 07:41:00.3971 INFO Executing handler method GrassMiner.Areas.Identity.Pages.Account.LoginModel.OnGetAsync - ModelState is Valid
+2024-07-24 07:41:00.3971 INFO AuthenticationScheme: Identity.External signed out.
+2024-07-24 07:41:00.4007 INFO Executed handler method OnGetAsync, returned result .
+2024-07-24 07:41:00.4007 INFO Executing an implicit handler method - ModelState is Valid
+2024-07-24 07:41:00.4007 INFO Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2024-07-24 07:41:00.4672 INFO Executed page /Account/Login in 87.1095ms
+2024-07-24 07:41:00.4672 INFO Executed endpoint '/Account/Login'
+2024-07-24 07:41:00.4672 INFO Request finished HTTP/2 GET https://localhost:50914/Identity/Account/Login?ReturnUrl=%2FMiner - 200 - text/html;+charset=utf-8 105.0711ms
+2024-07-24 07:41:00.4882 INFO Request starting HTTP/2 GET https://localhost:50914/GrassMiner.styles.css - - -
+2024-07-24 07:41:00.4882 INFO Request finished HTTP/2 GET https://localhost:50914/GrassMiner.styles.css - 404 0 - 1.8439ms
+2024-07-24 07:41:00.4882 INFO Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:50914/GrassMiner.styles.css, Response status code: 404
+2024-07-24 07:41:00.8055 INFO Request starting HTTP/2 GET https://localhost:50914/_framework/aspnetcore-browser-refresh.js - - -
+2024-07-24 07:41:00.8080 INFO Request finished HTTP/2 GET https://localhost:50914/_framework/aspnetcore-browser-refresh.js - 200 13766 application/javascript;+charset=utf-8 2.7388ms
+2024-07-24 07:41:00.8326 INFO Request starting HTTP/2 GET https://localhost:50914/_vs/browserLink - - -
+2024-07-24 07:41:00.8553 INFO Request finished HTTP/2 GET https://localhost:50914/_vs/browserLink - 200 - text/javascript;+charset=UTF-8 22.9220ms
+2024-07-24 07:41:43.7879 INFO Adding 2 jobs, 2 triggers.
+2024-07-24 07:41:43.7940 INFO Adding job: DEFAULT.UpdateIpJob
+2024-07-24 07:41:43.7940 INFO Adding job: DEFAULT.ScreensShotJob
+2024-07-24 07:55:47.9369 INFO Adding 2 jobs, 2 triggers.
+2024-07-24 07:55:47.9369 INFO Adding job: DEFAULT.UpdateIpJob
+2024-07-24 07:55:47.9474 INFO Adding job: DEFAULT.ScreensShotJob
+2024-07-24 08:04:53.5346 INFO Adding 2 jobs, 2 triggers.
+2024-07-24 08:04:53.5346 INFO Adding job: DEFAULT.UpdateIpJob
+2024-07-24 08:04:53.5438 INFO Adding job: DEFAULT.ScreensShotJob
+2024-07-24 08:08:12.7545 INFO Adding 2 jobs, 2 triggers.
+2024-07-24 08:08:12.7615 INFO Adding job: DEFAULT.UpdateIpJob
+2024-07-24 08:08:12.7615 INFO Adding job: DEFAULT.ScreensShotJob
+2024-07-24 08:13:50.9983 INFO Adding 2 jobs, 2 triggers.
+2024-07-24 08:13:50.9983 INFO Adding job: DEFAULT.UpdateIpJob
+2024-07-24 08:13:50.9983 INFO Adding job: DEFAULT.ScreensShotJob
+2024-07-24 08:16:17.4911 INFO Adding 2 jobs, 2 triggers.
+2024-07-24 08:16:17.4975 INFO Adding job: DEFAULT.UpdateIpJob
+2024-07-24 08:16:17.4975 INFO Adding job: DEFAULT.ScreensShotJob
+2024-07-24 08:18:30.0068 INFO Adding 2 jobs, 2 triggers.
+2024-07-24 08:18:30.0128 INFO Adding job: DEFAULT.UpdateIpJob
+2024-07-24 08:18:30.0128 INFO Adding job: DEFAULT.ScreensShotJob
+2024-07-24 09:00:53.1103 INFO Adding 2 jobs, 2 triggers.
+2024-07-24 09:00:53.1103 INFO Adding job: DEFAULT.UpdateIpJob
+2024-07-24 09:00:53.1200 INFO Adding job: DEFAULT.ScreensShotJob
+2024-07-24 09:05:33.8018 INFO Adding 2 jobs, 2 triggers.
+2024-07-24 09:05:33.8080 INFO Adding job: DEFAULT.UpdateIpJob
+2024-07-24 09:05:33.8080 INFO Adding job: DEFAULT.ScreensShotJob
+2024-07-24 09:10:54.6525 INFO Adding 2 jobs, 2 triggers.
+2024-07-24 09:10:54.6525 INFO Adding job: DEFAULT.UpdateIpJob
+2024-07-24 09:10:54.6525 INFO Adding job: DEFAULT.ScreensShotJob

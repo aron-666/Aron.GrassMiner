@@ -85,7 +85,9 @@ namespace GrassMiner.Services
         {
             try
             {
+                driver?.Close();
                 driver?.Quit();
+                driver?.Dispose();
                 driver = null;
                 _minerRecord.Status = MinerStatus.AppStart;
                 _minerRecord.IsConnected = false;
@@ -376,7 +378,9 @@ namespace GrassMiner.Services
             }
             finally
             {
+                driver?.Close();
                 driver?.Quit();
+                driver?.Dispose();
                 driver = null;
             }
         }

@@ -35,11 +35,9 @@
             btnConfig = new Button();
             btnAdmin = new Button();
             btnControl = new Button();
-            lbPorts = new Label();
             lbPid = new Label();
             lbModule = new Label();
             label5 = new Label();
-            label4 = new Label();
             label3 = new Label();
             label2 = new Label();
             label1 = new Label();
@@ -61,6 +59,7 @@
             ckServiceInstalled.TextAlign = ContentAlignment.TopLeft;
             ckServiceInstalled.UseVisualStyleBackColor = false;
             ckServiceInstalled.CheckedChanged += ckServiceInstalled_CheckedChanged;
+            ckServiceInstalled.Click += ckServiceInstalled_Click;
             // 
             // groupBox1
             // 
@@ -68,19 +67,17 @@
             groupBox1.Controls.Add(btnConfig);
             groupBox1.Controls.Add(btnAdmin);
             groupBox1.Controls.Add(btnControl);
-            groupBox1.Controls.Add(lbPorts);
             groupBox1.Controls.Add(lbPid);
             groupBox1.Controls.Add(lbModule);
             groupBox1.Controls.Add(label5);
-            groupBox1.Controls.Add(label4);
             groupBox1.Controls.Add(label3);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(ckServiceInstalled);
             groupBox1.Font = new Font("微軟正黑體", 12F, FontStyle.Bold, GraphicsUnit.Point, 136);
-            groupBox1.Location = new Point(12, 12);
+            groupBox1.Location = new Point(19, 19);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(818, 131);
+            groupBox1.Size = new Size(680, 131);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Modules";
@@ -88,7 +85,7 @@
             // btnLogs
             // 
             btnLogs.Font = new Font("微軟正黑體", 9F);
-            btnLogs.Location = new Point(646, 64);
+            btnLogs.Location = new Point(560, 62);
             btnLogs.Name = "btnLogs";
             btnLogs.Size = new Size(77, 36);
             btnLogs.TabIndex = 12;
@@ -99,27 +96,29 @@
             // btnConfig
             // 
             btnConfig.Font = new Font("微軟正黑體", 9F);
-            btnConfig.Location = new Point(563, 64);
+            btnConfig.Location = new Point(477, 62);
             btnConfig.Name = "btnConfig";
             btnConfig.Size = new Size(77, 36);
             btnConfig.TabIndex = 11;
             btnConfig.Text = "Config";
             btnConfig.UseVisualStyleBackColor = true;
+            btnConfig.Click += btnConfig_Click;
             // 
             // btnAdmin
             // 
             btnAdmin.Font = new Font("微軟正黑體", 9F);
-            btnAdmin.Location = new Point(480, 65);
+            btnAdmin.Location = new Point(394, 63);
             btnAdmin.Name = "btnAdmin";
             btnAdmin.Size = new Size(77, 36);
             btnAdmin.TabIndex = 10;
             btnAdmin.Text = "Admin";
             btnAdmin.UseVisualStyleBackColor = true;
+            btnAdmin.Click += btnAdmin_Click;
             // 
             // btnControl
             // 
             btnControl.Font = new Font("微軟正黑體", 9F);
-            btnControl.Location = new Point(397, 64);
+            btnControl.Location = new Point(311, 62);
             btnControl.Name = "btnControl";
             btnControl.Size = new Size(77, 36);
             btnControl.TabIndex = 9;
@@ -127,22 +126,12 @@
             btnControl.UseVisualStyleBackColor = true;
             btnControl.Click += btnControl_Click;
             // 
-            // lbPorts
-            // 
-            lbPorts.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 136);
-            lbPorts.Location = new Point(302, 69);
-            lbPorts.Name = "lbPorts";
-            lbPorts.Size = new Size(69, 25);
-            lbPorts.TabIndex = 8;
-            lbPorts.Text = "0";
-            lbPorts.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // lbPid
             // 
             lbPid.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 136);
-            lbPid.Location = new Point(205, 68);
+            lbPid.Location = new Point(183, 68);
             lbPid.Name = "lbPid";
-            lbPid.Size = new Size(69, 25);
+            lbPid.Size = new Size(108, 25);
             lbPid.TabIndex = 7;
             lbPid.Text = "0";
             lbPid.TextAlign = ContentAlignment.MiddleCenter;
@@ -161,21 +150,11 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("微軟正黑體", 10.2F, FontStyle.Bold);
-            label5.Location = new Point(397, 32);
+            label5.Location = new Point(311, 30);
             label5.Name = "label5";
             label5.Size = new Size(73, 22);
             label5.TabIndex = 5;
             label5.Text = "Actions";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Font = new Font("微軟正黑體", 10.2F, FontStyle.Bold);
-            label4.Location = new Point(313, 32);
-            label4.Name = "label4";
-            label4.Size = new Size(46, 22);
-            label4.TabIndex = 4;
-            label4.Text = "Port";
             // 
             // label3
             // 
@@ -210,17 +189,17 @@
             // timer1
             // 
             timer1.Enabled = true;
-            timer1.Interval = 500;
+            timer1.Interval = 1000;
             timer1.Tick += timer1_Tick;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(9F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(842, 475);
+            ClientSize = new Size(718, 176);
             Controls.Add(groupBox1);
             Name = "Form1";
-            Text = "Form1";
+            Text = "Aron.GrassMiner.WinControl";
             Load += Form1_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
@@ -232,7 +211,6 @@
         private CheckBox ckServiceInstalled;
         private GroupBox groupBox1;
         private Label label5;
-        private Label label4;
         private Label label3;
         private Label label2;
         private Label label1;
@@ -242,7 +220,6 @@
         private Button btnConfig;
         private Button btnAdmin;
         private Button btnControl;
-        private Label lbPorts;
         private System.Windows.Forms.Timer timer1;
     }
 }
