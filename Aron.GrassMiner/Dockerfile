@@ -12,7 +12,6 @@ RUN dotnet publish "Aron.GrassMiner.csproj" -c $BUILD_CONFIGURATION -o /app/publ
 FROM debian:bullseye-20240722-slim AS final
 EXPOSE 8080/tcp
 ENV ASPNETCORE_HTTP_PORTS 8080
-ENV ASPNETCORE_URLS http://0.0.0.0:$ASPNETCORE_HTTP_PORTS
 WORKDIR /app
 
 RUN apt-get update -y
