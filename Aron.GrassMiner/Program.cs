@@ -142,8 +142,7 @@ internal class Program
 
             DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             optionsBuilder.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
-            optionsBuilder.LogTo(s => Debug.WriteLine(s));
-            optionsBuilder.EnableSensitiveDataLogging();
+            
             ApplicationDbContext context = new ApplicationDbContext(optionsBuilder.Options);
 
 
