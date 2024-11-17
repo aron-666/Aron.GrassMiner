@@ -132,7 +132,8 @@ namespace GrassMiner.Services
                 options.AddArgument("--disable-gpu"); // 禁用 GPU 加速，减少资源占用
                 options.AddArgument("--disable-software-rasterizer"); // 禁用软件光栅化器
                 options.AddArgument("--disable-dev-shm-usage"); // 禁用 /dev/shm 临时文件系统
-                options.AddArgument("--force-dark-mode");
+                options.AddArgument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36");
+
                 options.AddExtension(extensionPath);
 
                 // 建立 Chrome 瀏覽器
@@ -226,7 +227,17 @@ namespace GrassMiner.Services
                     {
                         try
                         {
-                            return driver.PageSource.Contains("json-formatter-container");
+                            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                            if(!wait.Until(d => ((ChromeDriver)d).ExecuteScript("return document.readyState").ToString() == "complete"))
+                            {
+                                return false;
+                            }
+
+                            if(!wait.Until(d => d.PageSource.Contains("{\"error\"")))
+                            {
+                                return false;
+                            }
+                            return true;
 
                         }
                         catch (Exception ex)
@@ -328,8 +339,14 @@ namespace GrassMiner.Services
                             IWebElement? nextSiblingElement = imageElement?.FindElement(By.XPath("following-sibling::*"));
 
                             _minerRecord.Points = nextSiblingElement?.Text ?? "";
-                            IWebElement element = driver.FindElement(By.XPath("//p[starts-with(., 'Network quality:')]"));
-                            _minerRecord.NetworkQuality = element.Text.Replace("Network quality:", "");
+                            // 使用XPath找到包含"Network Quality:"的第一個<p>元素
+                            IWebElement labelElement = driver.FindElement(By.XPath("//p[.='Network Quality:']"));
+
+                            // 使用XPath找到同一層級下的下一個<p>元素，它包含"75%"
+                            IWebElement valueElement = labelElement.FindElement(By.XPath("./following-sibling::p[1]"));
+
+                            // 獲取元素的文本值，這應該是"75%"
+                            _minerRecord.NetworkQuality = valueElement.Text;
                             //IWebElement? userNameElement = driver.FindElement(By.CssSelector("span[title='Username']"));
                             _minerRecord.IsConnected = true;
                         }

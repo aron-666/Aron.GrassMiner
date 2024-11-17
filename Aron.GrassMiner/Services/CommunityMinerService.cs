@@ -3,6 +3,7 @@ using GrassMiner.Models;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 using System.Drawing;
 using System.Net;
 using System.Text;
@@ -130,7 +131,8 @@ namespace GrassMiner.Services
                 options.AddArgument("--disable-gpu"); // 禁用 GPU 加速，减少资源占用
                 options.AddArgument("--disable-software-rasterizer"); // 禁用软件光栅化器
                 options.AddArgument("--disable-dev-shm-usage"); // 禁用 /dev/shm 临时文件系统
-                options.AddArgument("--force-dark-mode");
+                options.AddArgument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36");
+
                 options.AddExtension(extensionPath);
 
                 // 建立 Chrome 瀏覽器
@@ -224,7 +226,17 @@ namespace GrassMiner.Services
                     {
                         try
                         {
-                            return driver.PageSource.Contains("json-formatter-container");
+                            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                            if (!wait.Until(d => ((ChromeDriver)d).ExecuteScript("return document.readyState").ToString() == "complete"))
+                            {
+                                return false;
+                            }
+
+                            if (!wait.Until(d => d.PageSource.Contains("{\"error\"")))
+                            {
+                                return false;
+                            }
+                            return true;
 
                         }
                         catch (Exception ex)
