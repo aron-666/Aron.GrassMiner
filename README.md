@@ -36,6 +36,10 @@
          - IS_COMMUNITY=false
          - ADMIN_USER=admin
          - ADMIN_PASS=admin
+         - PROXY_ENABLE=true # false
+         - PROXY_HOST=http(s)://host:port
+         - PROXY_USER=user
+         - PROXY_PASS=pass
        ports:
          - 5001:8080
        restart: always
