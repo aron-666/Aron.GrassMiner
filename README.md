@@ -10,16 +10,6 @@
 ## 好用請支持，使用我的推薦碼註冊: RI3NGc63lVmUQix
 [立即註冊 app.getgrass.io](https://app.getgrass.io/register/?referralCode=RI3NGc63lVmUQix)
 
-Grass 目前場外(未上市)價格來到 1:0.001USDT
-
-掛滿一天可以挖1800顆 等於一天1.8USDT
-
-Grass挖礦不吃硬體，吃少許流量(每秒10-30KB)，就可以進行挖礦。
-
-將來上市交易所，積分可直接換成加密貨幣。
-
-別人的介紹: https://www.binance.com/zh-TC/feed/post/1783966376178
-
 ## 執行畫面
 1. 登入
 ![image](https://github.com/aron-666/Aron.GrassMiner/blob/master/%E6%88%AA%E5%9C%96/%E5%BE%8C%E8%87%BA%E7%99%BB%E5%85%A5%E7%95%AB%E9%9D%A2.png?raw=true)
@@ -35,15 +25,20 @@ Grass挖礦不吃硬體，吃少許流量(每秒10-30KB)，就可以進行挖礦
 
 2. 編輯 docker-compose.yml (在程式碼的docker-install資料夾內)
    ```
-   GRASS_USER=你的 Grass 帳號
-   GRASS_PASS=你的 Grass 密碼
-   ADMIN_USER=後臺管理帳號(自訂義)
-   ADMIN_PASS=後臺管理密碼(自訂義)
-   IS_COMMUNITY=false (若要使用社區節點，請改為true)
-   PROXY_ENABLE=true # false
-   PROXY_HOST=http(s)://host:port
-   PROXY_USER=user
-   PROXY_PASS=pass
+   version: '1'
+   services:
+     grassminer:
+       image: aron666/aron.grassminer
+       container_name: grassminer
+       environment:
+         - GRASS_USER=user
+         - GRASS_PASS=password
+         - IS_COMMUNITY=false
+         - ADMIN_USER=admin
+         - ADMIN_PASS=admin
+       ports:
+         - 5001:8080
+       restart: always
    ```
 
    - Port 5001 會在你電腦上開一個 Port，要讓區網連請開防火牆 Port 5001

@@ -33,15 +33,20 @@ Others' Introduction: [Binance Article](https://www.binance.com/zh-TC/feed/post/
 
 2. Edit docker-compose.yml (In the docker-install folder of the source code)
    ```
-   GRASS_USER=Your Grass account
-   GRASS_PASS=Your Grass password
-   IS_COMMUNITY=false (To use community node, change to true)  
-   ADMIN_USER=Backend management account (customizable)
-   ADMIN_PASS=Backend management password (customizable)
-   PROXY_ENABLE=true / false
-   PROXY_HOST=http(s)://host:port
-   PROXY_USER=user
-   PROXY_PASS=pass
+   version: '1'
+   services:
+   grassminer:
+      image: aron666/aron.grassminer
+      container_name: grassminer
+      environment:
+         - GRASS_USER=user
+         - GRASS_PASS=password
+         - IS_COMMUNITY=false
+         - ADMIN_USER=admin
+         - ADMIN_PASS=admin
+      ports:
+         - 5001:8080
+      restart: always
    ```
 
    - Port 5001 will open a port on your computer. Open firewall port 5001 for LAN access.
