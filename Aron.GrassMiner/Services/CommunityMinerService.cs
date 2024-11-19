@@ -168,7 +168,8 @@ namespace GrassMiner.Services
                     HttpClient client = new HttpClient();
                     var request = new HttpRequestMessage(HttpMethod.Post, "https://api.getgrass.io/login");
                     request.Headers.Add("Accept", "*/*");
-                    request.Headers.Add("Accept-Encoding", "gzip, deflate, br, zstd");
+                    //request.Headers.Add("Accept-Encoding", "gzip, deflate, br, zstd");
+                    request.Headers.Remove("Accept-Encoding");
                     request.Headers.Add("Accept-Language", "zh-TW,zh;q=0.9");
                     request.Headers.Add("Origin", "https://app.getgrass.io");
                     request.Headers.Add("Priority", "u=1, i");
