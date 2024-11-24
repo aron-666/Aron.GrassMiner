@@ -1,29 +1,27 @@
-﻿using GrassMiner.Models;
-using GrassMiner.Services;
+﻿using Aron.GrassMiner.Models;
+using Aron.GrassMiner.Services;
 using OpenQA.Selenium;
-using Quartz;
 using System.Drawing;
 using System.Net;
 using System.Xml.Linq;
 
 namespace Aron.GrassMiner.Jobs
 {
-    public class ScreensShotJob(MinerRecord _minerRecord, IMinerService minerService) : IJob
+    public class ScreensShotJob(MinerRecord _minerRecord, IMinerService minerService) : IHostedService, IDisposable
     {
-        public Task Execute(IJobExecutionContext context)
+
+        private Timer _timer;
+        public int Interval { get; } = 5000;
+
+        public void Execute(object state)
         {
             try
             {
-                if(minerService.driver == null)
+                if (minerService.driver == null)
                 {
-                    return Task.CompletedTask;
+                    return;
                 }
 
-                // 設置瀏覽器窗口大小以包含整個網頁
-                minerService.driver.Manage().Window.Size = new Size(1024, 768);
-
-                // 等待窗口調整完成
-                Thread.Sleep(1000);
 
                 // 截圖
                 Screenshot screenshot = ((ITakesScreenshot)minerService.driver).GetScreenshot();
@@ -33,11 +31,27 @@ namespace Aron.GrassMiner.Jobs
             catch (Exception e)
             {
             }
+            return;
+
+        }
+
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            _timer = new Timer(Execute, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(Interval));
             return Task.CompletedTask;
-            
         }
 
         
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            _timer?.Change(Timeout.Infinite, 0);
+            return Task.CompletedTask;
+        }
+
+        public void Dispose()
+        {
+            _timer?.Dispose();
+        }
 
 
     }

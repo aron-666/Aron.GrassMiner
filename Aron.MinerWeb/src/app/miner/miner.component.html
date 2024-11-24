@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6 mb-4">
+      <div class="card" [ngClass]="cardStatus" id="card">
+        <div class="card-body">
+          <div id="divUpdate" *ngIf="minerRecord?.NeedUpdate">
+            <span id="updateMsg">{{ updateMessage }}</span>
+            <br />
+            <a id="goToUpdate" href="https://github.com/aron-666/Aron.GrassMiner">前往更新</a>
+            <br /><br />
+          </div>
+          <div class="card-text">
+            <strong>礦老闆: </strong> <span id="loginUserName">{{ minerRecord?.LoginUserName }}</span><br /><br />
+            <strong>狀態: </strong> <span id="status">{{ statusDisplay }}</span><br /><br />
+            <strong>是否連線: </strong> <span id="isConnected">{{ minerRecord?.IsConnected }}</span><br /><br />
+            <strong>外網IP: </strong> <span id="publicIp">{{ minerRecord?.PublicIp }}</span><br /><br />
+            <strong>網路品質: </strong> <span id="networkQuality">{{ minerRecord?.NetworkQuality }}</span><br /><br />
+            <strong>總工資: </strong> <span id="points">{{ minerRecord?.Points }}</span><br /><br />
+            <div id="recSec" *ngIf="minerRecord?.Status === 'Disconnected'">
+              <strong>重連秒數: </strong> <span id="reconnectSeconds">{{ minerRecord?.ReconnectSeconds }}</span><br /><br />
+            </div>
+            <div id="recCount" *ngIf="minerRecord?.Status === 'Disconnected'">
+              <strong>重連次數: </strong> <span id="reconnectCounts">{{ minerRecord?.ReconnectCounts }}</span><br /><br />
+            </div>
+            <p id="exMsg" *ngIf="minerRecord?.Exception && minerRecord?.Status === 'Error'"><strong>錯誤訊息: </strong> <span id="exception">{{ minerRecord?.Exception }}</span><br /><br /></p>
+            <p id="exTime" *ngIf="minerRecord?.Exception && minerRecord?.Status === 'Error'"><strong>錯誤時間: </strong> <span id="exceptionTime">{{ minerRecord?.ExceptionTime }}</span><br /><br /></p>
+            <img id="img1" [src]="minerRecord?.Base64Image" alt="狀態圖片" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
