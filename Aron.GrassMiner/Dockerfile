@@ -29,8 +29,8 @@ WORKDIR "/src"
 RUN dotnet publish "Aron.GrassMiner.csproj" -c $BUILD_CONFIGURATION -o /app/publish --self-contained -r linux-x64 /p:PublishAot=true
 
 FROM debian:bookworm-20241111-slim AS final
-EXPOSE 50005/tcp
-ENV ASPNETCORE_HTTP_PORTS 50005
+EXPOSE 8080/tcp
+ENV ASPNETCORE_HTTP_PORTS 8080
 WORKDIR /app
 
 RUN apt-get update -y
