@@ -3,12 +3,12 @@ services:
   grass:
     image: aron666/aron.grassminer
     environment:
-      - GR_USER=user
-      - GR_PASS=password
+      - GRASS_USER=user
+      - GRASS_PASS=password
       - ADMIN_USER=admin
       - ADMIN_PASS=admin
     ports:
-      - 5005:50005
+      - 5001:8080
     build: 
       context: .
       dockerfile: Dockerfile
