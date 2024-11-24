@@ -89,20 +89,7 @@ internal class Program
             app.UseMinerAPI();
             app.AddIdentityAPI();
             app.UseIndex();
-            app.UseEndpoints(endpoints =>
-            {
-                // MapFallback to /
-                endpoints.MapFallback((x) => {
-
-                    //go to index
-                    if(x.Response.StatusCode == 404)
-                    {
-                        x.Response.Redirect("/");
-                    }
-                    return Task.CompletedTask;
-
-                });
-            });
+            
 
 
 
