@@ -132,7 +132,7 @@ namespace Aron.GrassMiner.Services
                 options.AddArgument("--disable-notifications");
                 options.AddArgument("--disable-popup-blocking");
                 options.AddArgument("--disable-infobars");
-                options.AddArgument("--renderer-process-limit=1");
+                options.AddArgument("--renderer-process-limit=3");
                 //options.AddArgument("--force-dark-mode");
                 options.AddArgument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0");
 
