@@ -1,8 +1,6 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace GrassMiner.Models
+namespace Aron.GrassMiner.Models
 {
     public class MinerRecord
     {
@@ -10,8 +8,9 @@ namespace GrassMiner.Models
 
         public string? LastAppVersion { get; set; } = null;
 
-        public bool NeedUpdate {
-            get 
+        public bool NeedUpdate
+        {
+            get
             {
                 if (AppVersion == null || LastAppVersion == null)
                 {
@@ -28,14 +27,15 @@ namespace GrassMiner.Models
 
                 for (int i = 0; i < appVersion.Length; i++)
                 {
-                    if (int.Parse(appVersion[i]) < int.Parse(lastAppVersion[i]))
+                    
+                    if (int.Parse(appVersion[i]) > int.Parse(lastAppVersion[i]))
                     {
-                        return true;
+                        return false;
                     }
                 }
-                return false;
+                return true;
 
-            } 
+            }
         }
         /// <summary>
         /// 連線使用者名稱
@@ -78,7 +78,6 @@ namespace GrassMiner.Models
         /// <summary>
         /// 狀態
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))] 
         public MinerStatus Status { get; set; }
 
         /// <summary>

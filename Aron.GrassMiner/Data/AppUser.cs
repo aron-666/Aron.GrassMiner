@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace GrassMiner.Data
+namespace Aron.GrassMiner.Data
 {
     public class AppUser : IdentityUser
     {

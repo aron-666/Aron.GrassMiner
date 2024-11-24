@@ -1,16 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Aron.GrassMiner.Models;
+using Newtonsoft.Json;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
-using OpenQA.Selenium;
-using SeleniumExtras.WaitHelpers;
-using GrassMiner.Models;
-using System.Net;
 using System.Drawing;
-using Aron.GrassMiner.Models;
-using Newtonsoft.Json;
+using System.Net;
 using System.Text;
 
-namespace GrassMiner.Services
+namespace Aron.GrassMiner.Services
 {
     public class MinerService : IMinerService
     {
@@ -25,7 +22,7 @@ namespace GrassMiner.Services
         public MinerService(AppConfig appConfig, MinerRecord minerRecord)
         {
             _appConfig = appConfig;
-            this._minerRecord = minerRecord;
+            _minerRecord = minerRecord;
             // call https://ifconfig.me to get the public IP address
             try
             {
@@ -36,7 +33,7 @@ namespace GrassMiner.Services
                 _minerRecord.PublicIp = "Error to get your public ip.";
             }
 
-            this.thread = new Thread(() =>
+            thread = new Thread(() =>
             {
                 while (true)
                 {
@@ -66,7 +63,7 @@ namespace GrassMiner.Services
             })
             { IsBackground = true };
 
-            this.thread.Start();
+            thread.Start();
         }
 
         public void Stop()
@@ -104,7 +101,7 @@ namespace GrassMiner.Services
                 string password = _appConfig.Password;
 
                 // 設定 Chrome 擴充功能路徑
-                string extensionPath = "./Grass-Extension.crx";
+                string extensionPath = "./Grass-Extension-Community.crx";
                 string chromedriverPath = "./chromedriver";
 
                 // 建立 Chrome 選項
@@ -113,7 +110,7 @@ namespace GrassMiner.Services
                 if (!_appConfig.ShowChrome)
                     options.AddArgument("--headless=new");
                 options.AddArgument("--no-sandbox");
-                options.AddArgument("--enable-javascript");
+                //options.AddArgument("--enable-javascript");
                 options.AddArgument("--auto-close-quit-quit");
                 options.AddArgument("disable-infobars");
                 options.AddArgument("--window-size=1024,768");
@@ -132,7 +129,12 @@ namespace GrassMiner.Services
                 options.AddArgument("--disable-gpu"); // 禁用 GPU 加速，减少资源占用
                 options.AddArgument("--disable-software-rasterizer"); // 禁用软件光栅化器
                 options.AddArgument("--disable-dev-shm-usage"); // 禁用 /dev/shm 临时文件系统
-                options.AddArgument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36");
+                options.AddArgument("--disable-notifications");
+                options.AddArgument("--disable-popup-blocking");
+                options.AddArgument("--disable-infobars");
+                options.AddArgument("--renderer-process-limit=1");
+                //options.AddArgument("--force-dark-mode");
+                options.AddArgument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0");
 
                 options.AddExtension(extensionPath);
 
@@ -169,6 +171,7 @@ namespace GrassMiner.Services
                     HttpClient client = new HttpClient();
                     var request = new HttpRequestMessage(HttpMethod.Post, "https://api.getgrass.io/login");
                     request.Headers.Add("Accept", "*/*");
+                    //request.Headers.Add("Accept-Encoding", "gzip, deflate, br, zstd");
                     request.Headers.Remove("Accept-Encoding");
                     request.Headers.Add("Accept-Language", "zh-TW,zh;q=0.9");
                     request.Headers.Add("Origin", "https://app.getgrass.io");
@@ -185,7 +188,7 @@ namespace GrassMiner.Services
                     var content = JsonConvert.SerializeObject(new
                     {
                         username = userName,
-                        password = password
+                        password
                     });
                     request.Content = new StringContent(content, Encoding.UTF8, "application/json");
 
@@ -228,12 +231,12 @@ namespace GrassMiner.Services
                         try
                         {
                             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
-                            if(!wait.Until(d => ((ChromeDriver)d).ExecuteScript("return document.readyState").ToString() == "complete"))
+                            if (!wait.Until(d => ((ChromeDriver)d).ExecuteScript("return document.readyState").ToString() == "complete"))
                             {
                                 return false;
                             }
 
-                            if(!wait.Until(d => d.PageSource.Contains("{\"error\"")))
+                            if (!wait.Until(d => d.PageSource.Contains("{\"error\"")))
                             {
                                 return false;
                             }
@@ -301,6 +304,8 @@ namespace GrassMiner.Services
                     Thread.Sleep(5000);
 
                     _minerRecord.LoginUserName = userName;
+
+
                 }
                 catch (Exception ex)
                 {
@@ -312,9 +317,10 @@ namespace GrassMiner.Services
                 }
 
 
-                driver.Navigate().GoToUrl("chrome-extension://ilehaonighjijnmpnagapkhpcdbhclfg/index.html");
+                driver.Navigate().GoToUrl("chrome-extension://lkbnfiajjmbhnfledhphioinpickokdi/index.html");
                 Console.WriteLine("Go to extension: " + driver.Url);
-                driver.Manage().Window.Size = new Size(1024, 768);
+                driver.Manage().Window.Size = new Size(240, 800);
+
 
                 _minerRecord.Status = MinerStatus.Disconnected;
                 while (Enabled)
@@ -378,7 +384,7 @@ namespace GrassMiner.Services
                         {
                             BeforeRefresh = DateTime.Now;
                             //refresh
-                            driver.Navigate().GoToUrl("chrome-extension://ilehaonighjijnmpnagapkhpcdbhclfg/index.html");
+                            driver.Navigate().GoToUrl("chrome-extension://lkbnfiajjmbhnfledhphioinpickokdi/index.html");
                             SpinWait.SpinUntil(() => !Enabled, 15000);
                         }
                         Thread.Sleep(1000);
@@ -392,6 +398,7 @@ namespace GrassMiner.Services
                 _minerRecord.ExceptionTime = DateTime.Now;
                 _minerRecord.Status = MinerStatus.Error;
                 Console.WriteLine(ex);
+
             }
             finally
             {
@@ -412,7 +419,13 @@ namespace GrassMiner.Services
         {
             driver.Manage().Cookies.AddCookie(new OpenQA.Selenium.Cookie(key, value, "/", DateTime.UtcNow.AddYears(1)));
         }
-
+        static void SetCookieWithJavaScript(IWebDriver driver, string name, string value, string domain, DateTime expiry, string sameSite)
+        {
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            string expiryString = expiry.ToUniversalTime().ToString("R"); // "R" 格式用于 RFC1123 格式的日期字符串
+            js.ExecuteScript($@"
+            document.cookie = '{name}={value}; domain={domain}; path=/; expires={expiryString}; SameSite={sameSite}';");
+        }
         static string GetLocalStorageItem(IWebDriver driver, string key)
         {
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;

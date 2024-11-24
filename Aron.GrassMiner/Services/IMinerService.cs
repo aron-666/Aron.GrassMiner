@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium.Chrome;
 
-namespace GrassMiner.Services
+namespace Aron.GrassMiner.Services
 {
     public interface IMinerService
     {

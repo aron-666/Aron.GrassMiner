@@ -1,4 +1,4 @@
-namespace GrassMiner.Models
+namespace Aron.GrassMiner.Models
 {
     public class ErrorViewModel
     {

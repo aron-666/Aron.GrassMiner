@@ -117,8 +117,8 @@
                 success: function (data) {
                     const statusDisplay = statusDisplayMap[data.Status] || data.Status;
 
-                    if ($('#loginUserName').text() != data.LoginUserName)
-                        $('#loginUserName').text(data.LoginUserName);
+                    // if ($('#loginUserName').text() != data.LoginUserName)
+                    //     $('#loginUserName').text(data.LoginUserName);
 
                     if ($('#status').text() != statusDisplay)
                         $('#status').text(statusDisplay);
@@ -141,11 +141,11 @@
                     if ($('#publicIp').text() != data.PublicIp)
                         $('#publicIp').text(data.PublicIp);
 
-                    if ($('#points').text() != data.Points)
-                        $('#points').text(data.Points);
+                    // if ($('#points').text() != data.Points)
+                    //     $('#points').text(data.Points);
 
-                    if ($('#networkQuality').text() != data.NetworkQuality)
-                        $('#networkQuality').text(data.NetworkQuality);
+                    // if ($('#networkQuality').text() != data.NetworkQuality)
+                    //     $('#networkQuality').text(data.NetworkQuality);
 
                     if ($('#img1').attr('src') != data.Base64Image)
                         $('#img1').attr('src', data.Base64Image);
@@ -205,12 +205,12 @@
                         <br /><br />
                     </div>
                     <p class="card-text">
-                        <strong>礦老闆: </strong> <span id="loginUserName"></span><br /><br />
+                        @* <strong>礦老闆: </strong> <span id="loginUserName"></span><br /><br /> *@
                         <strong>狀態: </strong> <span id="status"></span><br /><br />
                         <strong>是否連線: </strong> <span id="isConnected"></span><br /><br />
                         <strong>外網IP: </strong> <span id="publicIp"></span><br /><br />
-                        <strong>網路品質: </strong> <span id="networkQuality"></span><br /><br />
-                        <strong>總工資: </strong> <span id="points"></span><br /><br />
+                        @* <strong>網路品質: </strong> <span id="networkQuality"></span><br /><br />
+                        <strong>總工資: </strong> <span id="points"></span><br /><br /> *@
                         <div id="recSec">
                             <strong>重連秒數: </strong> <span id="reconnectSeconds"></span><br /><br />
                         </div>

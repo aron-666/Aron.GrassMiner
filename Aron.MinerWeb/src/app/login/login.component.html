@@ -1,0 +1,35 @@
+<div class="row">
+  <div class="col-md-4 mx-auto">
+    <h1>Login</h1>
+
+    <section>
+      <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+        <h2>Use a local account to log in.</h2>
+        <hr />
+        <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+          {{ errorMessage }}
+        </div>
+        <div class="form-floating mb-3">
+          <input type="text" id="userName" class="form-control" name="userName"
+                 [(ngModel)]="credentials.Username" #userName="ngModel" required placeholder="UserName">
+          <label for="userName" class="form-label">User Name</label>
+          <div *ngIf="userName.invalid && (userName.dirty || userName.touched)" class="text-danger">
+            <div *ngIf="userName.errors?.['required']">User Name is required.</div>
+          </div>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="password" id="password" class="form-control" name="password"
+                 [(ngModel)]="credentials.Password" #password="ngModel" required placeholder="password">
+          <label for="password" class="form-label">Password</label>
+          <div *ngIf="password.invalid && (password.dirty || password.touched)" class="text-danger">
+            <div *ngIf="password.errors?.['required']">Password is required.</div>
+          </div>
+        </div>
+
+        <div>
+          <button type="submit" class="w-100 btn btn-lg btn-primary" [disabled]="!loginForm.valid">Log in</button>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>

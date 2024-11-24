@@ -1,10 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
+<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-GrassMiner-446b1b79-4315-4798-b0bb-56888db86536</UserSecretsId>
+    <UserSecretsId>aspnet-Aron.GrassMiner-446b1b79-4315-4798-b0bb-56888db86536</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <PublishTrimmed>False</PublishTrimmed>
     <PublishAot>False</PublishAot>
@@ -12,63 +11,46 @@
     <NeutralLanguage>zh-TW</NeutralLanguage>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/aron-666/Aron.GrassMiner</RepositoryUrl>
-    <FileVersion>1.0.2.7</FileVersion>
-    <AssemblyVersion>1.0.2.7</AssemblyVersion>
+    <FileVersion>1.0.2.8</FileVersion>
+    <AssemblyVersion>1.0.2.8</AssemblyVersion>
     <Version>$(AssemblyVersion)</Version>
+    <PublishAot>true</PublishAot>
+    <IsAotCompatible>true</IsAotCompatible>
+    <PublishTrimmed>true</PublishTrimmed>
   </PropertyGroup>
-
   <ItemGroup>
-    <None Include="..\README.md">
+    <TrimmerRootAssembly Include="Aron.GrassMiner" />
+  </ItemGroup>
+  <PropertyGroup>
+    <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateSourceFile>true</GenerateSourceFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\*.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
-    <PackageReference Include="NLog" Version="5.3.2" />
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.11" />
-    <PackageReference Include="Quartz" Version="3.13.1" />
-    <PackageReference Include="Quartz.AspNetCore" Version="3.13.1" />
+    <PackageReference Include="Aron.NetCore.Util" Version="8.0.0.11" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
+    <PackageReference Include="NLog" Version="5.3.4" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.15" />
     <PackageReference Include="Selenium.Support" Version="4.26.1" />
     <PackageReference Include="Selenium.WebDriver" Version="4.26.1" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="131.0.6778.6900" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="131.0.6778.8500" />
     <PackageReference Include="SeleniumExtras.WaitHelpers" Version="1.0.2" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
-
   <ItemGroup>
-    <Reference Include="SW.NetCore2">
-      <HintPath>libs\SW.NetCore2.dll</HintPath>
-    </Reference>
+    <None Update="*.crx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-
   <ItemGroup>
-    <None Update="Grass-Extension-Community.crx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Grass-Extension.crx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Temp\TempGrass.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Folder Include="libs\" />
   </ItemGroup>
-
 </Project>

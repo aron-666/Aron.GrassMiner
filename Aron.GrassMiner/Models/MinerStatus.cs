@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GrassMiner.Models
+namespace Aron.GrassMiner.Models
 {
 
     public enum MinerStatus

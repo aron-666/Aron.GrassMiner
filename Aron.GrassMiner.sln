@@ -5,9 +5,7 @@ VisualStudioVersion = 17.9.34526.213
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aron.GrassMiner", "Aron.GrassMiner\Aron.GrassMiner.csproj", "{7C0B8F8A-76CB-41B5-A07A-6ED1BDE642CC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aron.GrassMiner.Manager", "Aron.GrassMiner.Manager\Aron.GrassMiner.Manager.csproj", "{1E4DE272-E003-4472-B85E-7B1BA8032AEB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aron.GrassMiner.WinControl", "Aron.GrassMiner.WinControl\Aron.GrassMiner.WinControl.csproj", "{AB7629DB-26F1-4BC9-B5FF-5897E74671A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aron.GrassMiner.WinControl", "Aron.GrassMiner.WinControl\Aron.GrassMiner.WinControl.csproj", "{AB7629DB-26F1-4BC9-B5FF-5897E74671A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +17,6 @@ Global
 		{7C0B8F8A-76CB-41B5-A07A-6ED1BDE642CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C0B8F8A-76CB-41B5-A07A-6ED1BDE642CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C0B8F8A-76CB-41B5-A07A-6ED1BDE642CC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1E4DE272-E003-4472-B85E-7B1BA8032AEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E4DE272-E003-4472-B85E-7B1BA8032AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1E4DE272-E003-4472-B85E-7B1BA8032AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1E4DE272-E003-4472-B85E-7B1BA8032AEB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AB7629DB-26F1-4BC9-B5FF-5897E74671A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AB7629DB-26F1-4BC9-B5FF-5897E74671A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB7629DB-26F1-4BC9-B5FF-5897E74671A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
