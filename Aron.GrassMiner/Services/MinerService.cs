@@ -132,7 +132,7 @@ namespace Aron.GrassMiner.Services
                 options.AddArgument("--disable-notifications");
                 options.AddArgument("--disable-popup-blocking");
                 options.AddArgument("--disable-infobars");
-                options.AddArgument("--renderer-process-limit=1");
+                options.AddArgument("--renderer-process-limit=3");
                 //options.AddArgument("--force-dark-mode");
                 options.AddArgument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0");
 
@@ -380,14 +380,16 @@ namespace Aron.GrassMiner.Services
                                 break;
                             }
                         }
-                        if (Enabled && BeforeRefresh.AddSeconds(60) <= DateTime.Now)
+
+                        // 20-35 分鐘後重新整理
+                        if (Enabled && BeforeRefresh.AddMinutes(15 + new Random().Next(5, 20)) <= DateTime.Now)
                         {
                             BeforeRefresh = DateTime.Now;
                             //refresh
                             driver.Navigate().GoToUrl("chrome-extension://lkbnfiajjmbhnfledhphioinpickokdi/index.html");
                             SpinWait.SpinUntil(() => !Enabled, 15000);
                         }
-                        Thread.Sleep(1000);
+                        Thread.Sleep(5000);
                     }
                 }
                 _minerRecord.Status = MinerStatus.Stop;
