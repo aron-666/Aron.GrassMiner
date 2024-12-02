@@ -5,7 +5,6 @@ stages:
 build:
   tags:
     - arm64
-    - amd64
   stage: build
   script:
     - echo "Building the application"
