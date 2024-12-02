@@ -1,0 +1,18 @@
+stages:
+  - build
+  - deploy
+
+build:
+  tags:
+    - arm64
+    - amd64
+  stage: build
+  script:
+    - echo "Building the application"
+
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploying the application"
+  

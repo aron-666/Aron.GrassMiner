@@ -1,36 +1,73 @@
-﻿FROM debian:bookworm-20241111-slim AS build
+﻿ARG TARGETARCH
+ARG PROJECT_NAME=Aron.GrassMiner
+ARG OS=linux
+
+FROM --platform=$OS/$TARGETARCH mcr.microsoft.com/dotnet/sdk:8.0.404-bookworm-slim AS build
+ARG TARGETARCH
+ARG PROJECT_NAME
+ARG OS
+
+
 ARG BUILD_CONFIGURATION=Release
+ENV TARGETARCH=$TARGETARCH
+ENV PROJECT_NAME=$PROJECT_NAME
 
 WORKDIR /src
 
+RUN uname -m
+
+
 RUN apt-get update && apt-get install -y \
-    wget \
     ca-certificates \
     curl \
-    gnupg && \
-    wget https://packages.microsoft.com/config/debian/11/prod.list -O /etc/apt/sources.list.d/microsoft-prod.list && \
-    wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | apt-key add - && \
-    apt-get update && apt-get install -y \
     clang \
     gcc \
     libc6-dev \
     libunwind-dev \
     zlib1g-dev \
-    dotnet-sdk-8.0 && \
-    rm -rf /var/lib/apt/lists/*
+    gnupg \
+     && rm -rf /var/lib/apt/lists/*
 
-COPY Aron.GrassMiner.csproj ./
-COPY ["nuget.config", ""]
-RUN dotnet restore "Aron.GrassMiner.csproj"
+
+COPY nuget.config ./ 
+COPY $PROJECT_NAME.csproj ./
+RUN dotnet restore "$PROJECT_NAME.csproj"
 
 COPY . ./
 
-WORKDIR "/src"
-RUN dotnet publish "Aron.GrassMiner.csproj" -c $BUILD_CONFIGURATION -o /app/publish --self-contained -r linux-x64 /p:PublishAot=true
+#RUN case "${TARGETARCH}" in \
+        #amd64) RID="x64" ;; \
+        #arm64) RID="arm64" ;; \
+        #arm/*) RID="arm" ;; \
+        #386)   RID="x86" ;; \
+        #*)     echo "Unsupported architecture: ${TARGETARCH}"; exit 1 ;; \
+    #esac \
+    #dotnet publish "$PROJECT_NAME.csproj" -c $BUILD_CONFIGURATION -o /app/publish --self-contained -r $OS-$RID /p:PublishAot=true
+#
 
-FROM debian:bookworm-20241111-slim AS final
+RUN case "$TARGETARCH" in \
+        amd64)  RID="x64" ;; \
+        arm64)  RID="arm64" ;; \
+        arm/*)  RID="arm" ;; \
+        386)   RID="x86" ;; \
+        *)     echo "Unsupported architecture: $TARGETARCH"; exit 1 ;; \
+    esac && \
+    dotnet publish "$PROJECT_NAME.csproj" -c $BUILD_CONFIGURATION \
+        -o /app/publish \
+        --self-contained \
+        -r $OS-$RID \
+        /p:PublishAot=true
+
+
+FROM --platform=$OS/$TARGETARCH debian:bookworm-20241111-slim AS final
+ARG TARGETARCH
+ARG PROJECT_NAME
+ENV PROJECT_NAME=$PROJECT_NAME
+
 EXPOSE 8080/tcp
-ENV ASPNETCORE_HTTP_PORTS 8080
+ENV ASPNETCORE_HTTP_PORTS=8080
+
+
 WORKDIR /app
 
 RUN apt-get update -y
@@ -45,6 +82,7 @@ RUN apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /app/publish .
-RUN chmod +x Aron.GrassMiner
 
-ENTRYPOINT ["./Aron.GrassMiner"]
+RUN chmod +x ${PROJECT_NAME}
+
+ENTRYPOINT ["./{$PROJECT_NAME}"]
