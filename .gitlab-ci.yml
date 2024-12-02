@@ -7,11 +7,13 @@ build:
     - arm64
   stage: build
   script:
-    - echo "Building the application"
+    - echo "$test"
 
 
 deploy:
+  tags:
+    - arm64
   stage: deploy
   script:
-    - echo "Deploying the application"
+    - echo "$test"
   
