@@ -7,7 +7,7 @@ build:
     - arm64
   stage: build
   script:
-    - echo $test
+    - echo ${test}
 
 
 deploy:
@@ -15,5 +15,5 @@ deploy:
     - arm64
   stage: deploy
   script:
-    - echo $test
+    - echo ${test}
   
