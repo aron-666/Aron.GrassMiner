@@ -51,7 +51,6 @@ push-image-amd64:
   services:
     - docker:dind
   script:
-    - docker push $IMAGE_NAME:amd64-$CI_COMMIT_SHORT_SHA
     - docker push $IMAGE_NAME:amd64-$TAG_LATEST
   only:
     - develop
@@ -64,7 +63,6 @@ push-image-arm64:
   services:
     - docker:dind
   script:
-    - docker push $IMAGE_NAME:arm64-$CI_COMMIT_SHORT_SHA
     - docker push $IMAGE_NAME:arm64-$TAG_LATEST
   only:
     - develop
