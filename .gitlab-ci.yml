@@ -42,10 +42,22 @@ build-arm64:
   only:
     - develop
 
-push-image:
+push-image-amd64:
   stage: push
   tags:
     - amd64
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker push $IMAGE_NAME:$CI_COMMIT_SHORT_SHA
+    - docker push $IMAGE_NAME:$TAG_LATEST
+  only:
+    - develop
+
+push-image-arm64:
+  stage: push
+  tags:
     - arm64
   image: docker:latest
   services:
