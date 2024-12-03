@@ -43,22 +43,10 @@ build-arm64:
     - $BRANCH
 
 
-push-image-amd64:
+push-image:
   stage: push
   tags:
     - amd64
-  image: docker
-  services:
-    - docker:dind
-  script:
-    - docker push $IMAGE_NAME:$TAG_LATEST
-  only:
-    - $BRANCH
-
-
-push-image-arm64:
-  stage: push
-  tags:
     - arm64
   image: docker
   services:
@@ -67,3 +55,4 @@ push-image-arm64:
     - docker push $IMAGE_NAME:$TAG_LATEST
   only:
     - $BRANCH
+
