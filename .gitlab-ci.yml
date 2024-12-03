@@ -25,7 +25,7 @@ build-amd64:
   script:
     - cd $PROJECT_NAME
     - docker build --build-arg TARGETARCH=amd64 -t $IMAGE_NAME:$CI_COMMIT_SHORT_SHA .
-    - docker tag $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:$TAG_LATEST # 標記為 latest
+    - docker tag $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:amd64-$TAG_LATEST # 標記為 latest
   only:
     - develop # 僅當 develop 分支有變更時觸發
 
@@ -39,7 +39,7 @@ build-arm64:
   script:
     - cd $PROJECT_NAME
     - docker build --build-arg TARGETARCH=arm64 -t $IMAGE_NAME:$CI_COMMIT_SHORT_SHA .
-    - docker tag $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:$TAG_LATEST
+    - docker tag $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:arm64-$TAG_LATEST
   only:
     - develop
 
