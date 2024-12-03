@@ -42,7 +42,6 @@ build-arm64:
   only:
     - $BRANCH
 
-
 push-image:
   stage: push
   tags:
