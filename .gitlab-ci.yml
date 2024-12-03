@@ -1,6 +1,7 @@
 stages:
   - build
   - push
+  - push-manifest
 
 variables:
   DOCKER_DRIVER: overlay2
@@ -50,8 +51,8 @@ push-image-amd64:
   services:
     - docker:dind
   script:
-    - docker push $IMAGE_NAME:$CI_COMMIT_SHORT_SHA
-    - docker push $IMAGE_NAME:$TAG_LATEST
+    - docker push $IMAGE_NAME:amd64-$CI_COMMIT_SHORT_SHA
+    - docker push $IMAGE_NAME:amd64-$TAG_LATEST
   only:
     - develop
 
@@ -63,7 +64,24 @@ push-image-arm64:
   services:
     - docker:dind
   script:
-    - docker push $IMAGE_NAME:$CI_COMMIT_SHORT_SHA
-    - docker push $IMAGE_NAME:$TAG_LATEST
+    - docker push $IMAGE_NAME:arm64-$CI_COMMIT_SHORT_SHA
+    - docker push $IMAGE_NAME:arm64-$TAG_LATEST
+  only:
+    - develop
+
+
+
+push-manifest:
+  stage: push-manifest
+  tags:
+    - amd64
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker pull $IMAGE_NAME:amd64-$TAG_LATEST
+    - docker pull $IMAGE_NAME:arm64-$TAG_LATEST
+    - docker manifest create $IMAGE_NAME:$TAG_LATEST $IMAGE_NAME:amd64-$TAG_LATEST $IMAGE_NAME:arm64-$TAG_LATEST
+    - docker manifest push $IMAGE_NAME:$TAG_LATEST
   only:
     - develop
