@@ -85,4 +85,4 @@ COPY --from=build /app/publish .
 
 RUN chmod +x ${PROJECT_NAME}
 
-ENTRYPOINT ["./$PROJECT_NAME"]
+ENTRYPOINT ["./${PROJECT_NAME}"]
