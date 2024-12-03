@@ -6,6 +6,8 @@ variables:
   DOCKER_DRIVER: overlay2
   IMAGE_NAME: "aron666/aron.grassminer"
   TAG_LATEST: "test"
+  BRANCH: develop
+  PROJECT_NAME: "Aron.GrassMiner"
 
 # 定義 Docker login 的全局設置
 before_script:
@@ -19,11 +21,11 @@ build-amd64:
   services:
     - docker:dind # 使用 Docker-in-Docker
   script:
-    - cd Aron.GrassMiner
+    - cd $PROJECT_NAME
     - docker build --build-arg TARGETARCH=amd64 -t $IMAGE_NAME:$CI_COMMIT_SHORT_SHA .
     - docker tag $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:$TAG_LATEST # 標記為 latest
   only:
-    - develop # 僅當該分支有變更時觸發
+    - $BRANCH # 僅當該分支有變更時觸發
 
 
 build-arm64:
@@ -34,19 +36,34 @@ build-arm64:
   services:
     - docker:dind
   script:
-    - cd Aron.GrassMiner
+    - cd $PROJECT_NAME
     - docker build --build-arg TARGETARCH=arm64 -t $IMAGE_NAME:$CI_COMMIT_SHORT_SHA .
     - docker tag $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:$TAG_LATEST
   only:
-    - develop
+    - $BRANCH
 
 
-push-image:
+push-image-amd64:
   stage: push
+  tags:
+    - amd64
   image: docker
   services:
     - docker:dind
   script:
     - docker push $IMAGE_NAME:$TAG_LATEST
   only:
-    - develop
+    - $BRANCH
+
+
+push-image-arm64:
+  stage: push
+  tags:
+    - arm64
+  image: docker
+  services:
+    - docker:dind
+  script:
+    - docker push $IMAGE_NAME:$TAG_LATEST
+  only:
+    - $BRANCH
