@@ -8,6 +8,7 @@ variables:
   TAG_LATEST: "test"
   BRANCH: develop
   PROJECT_NAME: "Aron.GrassMiner"
+  DOCKER_TLS_CERTDIR: "" # 禁用 TLS 驗證
 
 # 定義 Docker login 的全局設置
 before_script:
@@ -17,7 +18,7 @@ build-amd64:
   stage: build
   tags:
     - amd64
-  image: docker # 使用 Docker 官方鏡像
+  image: docker:latest # 使用 Docker 官方鏡像
   services:
     - docker:dind # 使用 Docker-in-Docker
   script:
@@ -25,14 +26,13 @@ build-amd64:
     - docker build --build-arg TARGETARCH=amd64 -t $IMAGE_NAME:$CI_COMMIT_SHORT_SHA .
     - docker tag $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:$TAG_LATEST # 標記為 latest
   only:
-    - $BRANCH # 僅當該分支有變更時觸發
-
+    - develop # 僅當 develop 分支有變更時觸發
 
 build-arm64:
   stage: build
   tags:
     - arm64
-  image: docker
+  image: docker:latest
   services:
     - docker:dind
   script:
@@ -40,18 +40,18 @@ build-arm64:
     - docker build --build-arg TARGETARCH=arm64 -t $IMAGE_NAME:$CI_COMMIT_SHORT_SHA .
     - docker tag $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:$TAG_LATEST
   only:
-    - $BRANCH
+    - develop
 
 push-image:
   stage: push
   tags:
     - amd64
     - arm64
-  image: docker
+  image: docker:latest
   services:
     - docker:dind
   script:
+    - docker push $IMAGE_NAME:$CI_COMMIT_SHORT_SHA
     - docker push $IMAGE_NAME:$TAG_LATEST
   only:
-    - $BRANCH
-
+    - develop
