@@ -6,7 +6,7 @@ using static Aron.NetCore.Util.Extensions.ServiceExtensions;
 using Aron.GrassMiner.ViewModels;
 using Aron.NetCore.Util.ViewModels;
 
-namespace Aron.GrassMiner.Services
+namespace Aron.GrassMiner
 {
     [JsonSourceGenerationOptions
         (
