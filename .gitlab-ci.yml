@@ -63,6 +63,6 @@ push-manifest:
     - docker manifest push $IMAGE_NAME:$TAG_VERSION
     - docker manifest create $IMAGE_NAME:$TAG_LATEST $IMAGE_NAME:amd64-$TAG_LATEST $IMAGE_NAME:arm64-$TAG_LATEST
     - docker manifest push $IMAGE_NAME:$TAG_LATEST
-    - docker rmi $IMAGE_NAME:amd64-$TAG_LATEST $IMAGE_NAME:arm64-$TAG_LATEST $IMAGE_NAME:$TAG_VERSION
+    - docker rmi $IMAGE_NAME:amd64-$TAG_LATEST $IMAGE_NAME:arm64-$TAG_LATEST
   only:
     - master
