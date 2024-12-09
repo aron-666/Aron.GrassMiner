@@ -102,7 +102,7 @@ namespace Aron.GrassMiner.Services
 
                 // 設定 Chrome 擴充功能路徑
                 string extensionPath = "./Grass-Extension-Community.crx";
-                string chromedriverPath = "./chromedriver";
+                string chromedriverPath = "/usr/bin/chromedriver";
 
                 // 建立 Chrome 選項
                 ChromeOptions options = new ChromeOptions();
@@ -319,7 +319,7 @@ namespace Aron.GrassMiner.Services
 
                 driver.Navigate().GoToUrl("chrome-extension://lkbnfiajjmbhnfledhphioinpickokdi/index.html");
                 Console.WriteLine("Go to extension: " + driver.Url);
-                driver.Manage().Window.Size = new Size(240, 800);
+                driver.Manage().Window.Size = new Size(440, 800);
 
 
                 _minerRecord.Status = MinerStatus.Disconnected;

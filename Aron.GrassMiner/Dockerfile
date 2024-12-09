@@ -70,6 +70,7 @@ RUN apt-get install -y --no-install-recommends \
     iputils-ping \
     ca-certificates \
     chromium \
+    chromium-driver \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /app/publish .
