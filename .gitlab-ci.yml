@@ -1,0 +1,65 @@
+stages:
+  - build-push
+  - push-manifest
+
+variables:
+  DOCKER_DRIVER: overlay2
+  IMAGE_NAME: "aron666/aron.grassminer"
+  TAG_LATEST: "test"
+  BRANCH: develop
+  PROJECT_NAME: "Aron.GrassMiner"
+  DOCKER_TLS_CERTDIR: "" # 禁用 TLS 驗證
+
+# 定義 Docker login 的全局設置
+before_script:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+build-amd64:
+  stage: build-push
+  tags:
+    - amd64
+  image: docker:latest # 使用 Docker 官方鏡像
+  services:
+    - docker:dind # 使用 Docker-in-Docker
+  script:
+    - cd $PROJECT_NAME
+    - docker build --build-arg TARGETARCH=amd64 -t $IMAGE_NAME:$CI_COMMIT_SHORT_SHA .
+    - docker tag $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:amd64-$TAG_LATEST # 標記為 latest
+    - docker push $IMAGE_NAME:amd64-$TAG_LATEST
+    - docker rmi $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:amd64-$TAG_LATEST
+  only:
+    - develop # 僅當 develop 分支有變更時觸發
+
+build-arm64:
+  stage: build-push
+  tags:
+    - arm64
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - cd $PROJECT_NAME
+    - docker build --build-arg TARGETARCH=arm64 -t $IMAGE_NAME:$CI_COMMIT_SHORT_SHA .
+    - docker tag $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:arm64-$TAG_LATEST
+    - docker push $IMAGE_NAME:arm64-$TAG_LATEST
+    - docker rmi $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:arm64-$TAG_LATEST
+  only:
+    - develop
+
+
+
+push-manifest:
+  stage: push-manifest
+  tags:
+    - amd64
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker pull $IMAGE_NAME:amd64-$TAG_LATEST
+    - docker pull $IMAGE_NAME:arm64-$TAG_LATEST
+    - docker manifest create $IMAGE_NAME:$TAG_LATEST $IMAGE_NAME:amd64-$TAG_LATEST $IMAGE_NAME:arm64-$TAG_LATEST
+    - docker manifest push $IMAGE_NAME:$TAG_LATEST
+    - docker rmi $IMAGE_NAME:amd64-$TAG_LATEST $IMAGE_NAME:arm64-$TAG_LATEST # 刪除本地映像
+  only:
+    - develop
