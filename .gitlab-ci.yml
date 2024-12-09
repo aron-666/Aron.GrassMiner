@@ -26,6 +26,7 @@ build-amd64:
     - docker build --build-arg TARGETARCH=amd64 -t $IMAGE_NAME:$CI_COMMIT_SHORT_SHA .
     - docker tag $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:amd64-$TAG_LATEST # 標記為 latest
     - docker push $IMAGE_NAME:amd64-$TAG_LATEST
+    - docker rmi $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:amd64-$TAG_LATEST
   only:
     - develop # 僅當 develop 分支有變更時觸發
 
@@ -41,6 +42,7 @@ build-arm64:
     - docker build --build-arg TARGETARCH=arm64 -t $IMAGE_NAME:$CI_COMMIT_SHORT_SHA .
     - docker tag $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:arm64-$TAG_LATEST
     - docker push $IMAGE_NAME:arm64-$TAG_LATEST
+    - docker rmi $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:arm64-$TAG_LATEST
   only:
     - develop
 
@@ -58,5 +60,6 @@ push-manifest:
     - docker pull $IMAGE_NAME:arm64-$TAG_LATEST
     - docker manifest create $IMAGE_NAME:$TAG_LATEST $IMAGE_NAME:amd64-$TAG_LATEST $IMAGE_NAME:arm64-$TAG_LATEST
     - docker manifest push $IMAGE_NAME:$TAG_LATEST
+    - docker rmi $IMAGE_NAME:amd64-$TAG_LATEST $IMAGE_NAME:arm64-$TAG_LATEST # 刪除本地映像
   only:
     - develop
