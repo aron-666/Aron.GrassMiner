@@ -35,15 +35,6 @@ RUN dotnet restore "$PROJECT_NAME.csproj"
 
 COPY . ./
 
-#RUN case "${TARGETARCH}" in \
-        #amd64) RID="x64" ;; \
-        #arm64) RID="arm64" ;; \
-        #arm/*) RID="arm" ;; \
-        #386)   RID="x86" ;; \
-        #*)     echo "Unsupported architecture: ${TARGETARCH}"; exit 1 ;; \
-    #esac \
-    #dotnet publish "$PROJECT_NAME.csproj" -c $BUILD_CONFIGURATION -o /app/publish --self-contained -r $OS-$RID /p:PublishAot=true
-#
 
 RUN case "$TARGETARCH" in \
         amd64)  RID="x64" ;; \
