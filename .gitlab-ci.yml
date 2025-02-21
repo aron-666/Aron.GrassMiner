@@ -5,9 +5,8 @@ stages:
 variables:
   DOCKER_DRIVER: overlay2
   IMAGE_NAME: "aron666/aron.grassminer"
-  TAG_LATEST: "latest"
-  TAG_VERSION: "1.0.2.10"
-  BRANCH: master
+  TAG_LATEST: "test"
+  BRANCH: develop
   PROJECT_NAME: "Aron.GrassMiner"
   DOCKER_TLS_CERTDIR: "" # 禁用 TLS 驗證
 
@@ -29,7 +28,7 @@ build-amd64:
     - docker push $IMAGE_NAME:amd64-$TAG_LATEST
     - docker rmi $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:amd64-$TAG_LATEST
   only:
-    - master # 僅當 master 分支有變更時觸發
+    - develop # 僅當 develop 分支有變更時觸發
 
 build-arm64:
   stage: build-push
@@ -45,7 +44,7 @@ build-arm64:
     - docker push $IMAGE_NAME:arm64-$TAG_LATEST
     - docker rmi $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:arm64-$TAG_LATEST
   only:
-    - master
+    - develop
 
 
 
@@ -59,10 +58,8 @@ push-manifest:
   script:
     - docker pull $IMAGE_NAME:amd64-$TAG_LATEST
     - docker pull $IMAGE_NAME:arm64-$TAG_LATEST
-    - docker manifest create $IMAGE_NAME:$TAG_VERSION $IMAGE_NAME:amd64-$TAG_LATEST $IMAGE_NAME:arm64-$TAG_LATEST
-    - docker manifest push $IMAGE_NAME:$TAG_VERSION
     - docker manifest create $IMAGE_NAME:$TAG_LATEST $IMAGE_NAME:amd64-$TAG_LATEST $IMAGE_NAME:arm64-$TAG_LATEST
     - docker manifest push $IMAGE_NAME:$TAG_LATEST
-    - docker rmi $IMAGE_NAME:amd64-$TAG_LATEST $IMAGE_NAME:arm64-$TAG_LATEST
+    - docker rmi $IMAGE_NAME:amd64-$TAG_LATEST $IMAGE_NAME:arm64-$TAG_LATEST # 刪除本地映像
   only:
-    - master
+    - develop

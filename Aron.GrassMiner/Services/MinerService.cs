@@ -139,7 +139,15 @@ namespace Aron.GrassMiner.Services
                 options.AddExtension(extensionPath);
 
                 // 建立 Chrome 瀏覽器
-                driver = new ChromeDriver(chromedriverPath, options);
+                if (!File.Exists(chromedriverPath))
+                {
+                    chromedriverPath = "./chromedriver";
+                    options.AddArgument("--chromedriver=" + chromedriverPath);
+                    driver = new ChromeDriver(options);
+
+                }
+                else
+                    driver = new ChromeDriver(chromedriverPath, options);
                 try
                 {
                     driver.Navigate().GoToUrl("https://app.getgrass.io/");
