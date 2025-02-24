@@ -6,7 +6,7 @@ variables:
   DOCKER_DRIVER: overlay2
   IMAGE_NAME: "aron666/aron.grassminer"
   TAG_LATEST: "latest"
-  TAG_VERSION: "1.0.2.11"
+  TAG_VERSION: "1.0.2.12"
   BRANCH: master
   PROJECT_NAME: "Aron.GrassMiner"
   DOCKER_TLS_CERTDIR: "" # 禁用 TLS 驗證
