@@ -26,7 +26,7 @@ namespace Aron.GrassMiner.Services
             // call https://ifconfig.me to get the public IP address
             try
             {
-                _minerRecord.PublicIp = new WebClient().DownloadString("https://ifconfig.me");
+                _minerRecord.PublicIp = new WebClient().DownloadString("https://ifconfig.me/ip");
             }
             catch (Exception ex)
             {
